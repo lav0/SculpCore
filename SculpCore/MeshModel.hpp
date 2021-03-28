@@ -12,7 +12,7 @@
 #include <memory>
 #include <unordered_map>
 #include <set>
-#include <list>
+#include <map>
 #include "IMesh.h"
 
 #pragma GCC visibility push(default)
@@ -64,7 +64,10 @@ public:
     
     const std::vector<std::shared_ptr<Face>>& faces() const override { return _faces; }
     const std::vector<Vec3>& vertices() const override { return ParentDataPool::_vertices; }
+    const std::vector<Vec3>&    normals() const override { return ParentDataPool::_normals; }
     Vec3 getFaceNormal(const Face& face) const override;
+    const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const override;
+    bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) override;
     
 private:
     
@@ -80,6 +83,7 @@ private:
 private:
     
     std::vector<std::shared_ptr<Face>> _faces;
+    std::map<std::shared_ptr<Face>, Vec4> _face_colors;
 };
 
 

@@ -33,7 +33,10 @@ public:
     
     virtual const std::vector<std::shared_ptr<std::vector<FaceVertex>>>& faces() const = 0;
     virtual const std::vector<Vec3>&    vertices() const = 0;
+    virtual const std::vector<Vec3>&    normals() const = 0;
     virtual Vec3 getFaceNormal(const std::vector<FaceVertex>& face) const = 0;
+    virtual const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const = 0;
+    virtual bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) = 0;
     
 };
 

@@ -24,7 +24,6 @@ struct FaceVertex
     size_t vn=BLANK_FACE_ENTRY;
 };
 
-
 struct Edge
 {
     Edge(size_t a, size_t b) : v0(a), v1(b) {}

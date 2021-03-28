@@ -41,6 +41,7 @@ void MeshModel<T>::fillInHelperContainer(const std::vector<Face>& faces)
     for (auto& face : faces)
     {
         _faces.push_back(std::make_shared<Face>(face));
+        _face_colors.emplace(_faces.back(), GeoTypes::DEFAULT_COLOR);
     }
 }
 
@@ -313,6 +314,31 @@ bool MeshModel<T>::transform(const boost::qvm::mat<float,4,4> trs)
         boost::qvm::vec<float, 4> n = XYZ0(normal);
         
         normal = XYZ(trs * n);
+    }
+    
+    return false;
+}
+
+template<typename T>
+const Vec4& MeshModel<T>::getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const
+{
+    static Vec4 v = {0, 0, 0, 1};
+    
+    auto face_color_pair = _face_colors.find(face);
+    if (face_color_pair != _face_colors.end()) {
+        return face_color_pair->second;
+    }
+    
+    return v;
+}
+
+template<typename T>
+bool MeshModel<T>::changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color)
+{
+    auto face_color_pair = _face_colors.find(face);
+    if (face_color_pair != _face_colors.end()) {
+        face_color_pair->second = new_color;
+        return true;
     }
     
     return false;
