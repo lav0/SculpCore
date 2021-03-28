@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		55AE6DB7261028EC00DF5921 /* SculpCore.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DB6261028EC00DF5921 /* SculpCore.hpp */; };
-		55AE6DB9261028EC00DF5921 /* SculpCorePriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DB8261028EC00DF5921 /* SculpCorePriv.hpp */; };
-		55AE6DBB261028EC00DF5921 /* SculpCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55AE6DBA261028EC00DF5921 /* SculpCore.cpp */; };
 		55AE6DEC26102BEB00DF5921 /* IGeometryEntity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DDA26102BEB00DF5921 /* IGeometryEntity.hpp */; };
 		55AE6DED26102BEB00DF5921 /* CommonFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55AE6DDB26102BEB00DF5921 /* CommonFunctions.cpp */; };
 		55AE6DEE26102BEB00DF5921 /* CommonFunctions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DDC26102BEB00DF5921 /* CommonFunctions.hpp */; };
@@ -32,9 +29,6 @@
 
 /* Begin PBXFileReference section */
 		55AE6DB3261028EC00DF5921 /* libSculpCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSculpCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		55AE6DB6261028EC00DF5921 /* SculpCore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SculpCore.hpp; sourceTree = "<group>"; };
-		55AE6DB8261028EC00DF5921 /* SculpCorePriv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SculpCorePriv.hpp; sourceTree = "<group>"; };
-		55AE6DBA261028EC00DF5921 /* SculpCore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SculpCore.cpp; sourceTree = "<group>"; };
 		55AE6DDA26102BEB00DF5921 /* IGeometryEntity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IGeometryEntity.hpp; sourceTree = "<group>"; };
 		55AE6DDB26102BEB00DF5921 /* CommonFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CommonFunctions.cpp; sourceTree = "<group>"; };
 		55AE6DDC26102BEB00DF5921 /* CommonFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CommonFunctions.hpp; sourceTree = "<group>"; };
@@ -104,9 +98,6 @@
 				55AE6DEA26102BEB00DF5921 /* Plane3D.hpp */,
 				55AE6DDD26102BEB00DF5921 /* StlWriter.cpp */,
 				55AE6DDF26102BEB00DF5921 /* StlWriter.hpp */,
-				55AE6DB6261028EC00DF5921 /* SculpCore.hpp */,
-				55AE6DB8261028EC00DF5921 /* SculpCorePriv.hpp */,
-				55AE6DBA261028EC00DF5921 /* SculpCore.cpp */,
 				55AE6E002610356900DF5921 /* GeoTypes.h */,
 			);
 			path = SculpCore;
@@ -127,9 +118,7 @@
 				55AE6DF726102BEB00DF5921 /* ObjReader.hpp in Headers */,
 				55AE6DF426102BEB00DF5921 /* CommonTypes.h in Headers */,
 				55AE6DF126102BEB00DF5921 /* StlWriter.hpp in Headers */,
-				55AE6DB9261028EC00DF5921 /* SculpCorePriv.hpp in Headers */,
 				55AE6DF626102BEB00DF5921 /* MeshModel.hpp in Headers */,
-				55AE6DB7261028EC00DF5921 /* SculpCore.hpp in Headers */,
 				55AE6DEE26102BEB00DF5921 /* CommonFunctions.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -197,7 +186,6 @@
 				55AE6DF826102BEB00DF5921 /* Plane3D.cpp in Sources */,
 				55AE6DF526102BEB00DF5921 /* LowLevelWriter.cpp in Sources */,
 				55AE6DED26102BEB00DF5921 /* CommonFunctions.cpp in Sources */,
-				55AE6DBB261028EC00DF5921 /* SculpCore.cpp in Sources */,
 				55AE6DF226102BEB00DF5921 /* IGeometryEntity.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
