@@ -7,6 +7,7 @@
 
 #include "MeshModel.hpp"
 #include "CommonFunctions.hpp"
+#include "Triangulator.hpp"
 #include <boost/qvm/vec_access.hpp>
 #include <boost/qvm/vec_operations.hpp>
 #include <boost/qvm/mat.hpp>
@@ -342,6 +343,60 @@ bool MeshModel<T>::changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, c
     }
     
     return false;
+}
+
+template<typename T>
+const std::vector<std::shared_ptr<Face>>& MeshModel<T>::triangulated_faces()
+{
+    if (_triangulated_faces.empty())
+    {
+        _triungulated_face_2_original.clear();
+        
+        auto& out_faces = _triangulated_faces;
+        const auto& origin_faces = faces();
+        
+        bool mesh_has_changes = false;
+        
+        for (auto& p_origin_face : origin_faces)
+        {
+            assert(p_origin_face->size() >= 3);
+            
+            if (p_origin_face->size() == 3)
+            {
+                _triangulated_faces.push_back(p_origin_face);
+                _triungulated_face_2_original.emplace(p_origin_face, p_origin_face);
+                continue;
+            }
+            
+            auto origin_face = *p_origin_face;
+            
+            auto pivot_vx = origin_face[0];
+            auto secon_vx = origin_face[1];
+            
+            for (size_t i=2; i<origin_face.size(); ++i)
+            {
+                auto third_vx = origin_face[i];
+                
+                Face new_face(3);
+                new_face[0] = pivot_vx;
+                new_face[1] = secon_vx;
+                new_face[2] = third_vx;
+                
+                _triangulated_faces.push_back(std::make_shared<Face>(new_face));
+                _triungulated_face_2_original.emplace(_triangulated_faces.back(),
+                                                      p_origin_face
+                                                      );
+                
+                secon_vx = third_vx;
+                
+                if (i == 3)
+                    mesh_has_changes = true;
+            }
+            
+        }
+    }
+    
+    return _triangulated_faces;
 }
 
 namespace Shapr3D {

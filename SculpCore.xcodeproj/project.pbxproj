@@ -25,6 +25,8 @@
 		55AE6DFB26102BEB00DF5921 /* LowLevelReader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DE926102BEB00DF5921 /* LowLevelReader.hpp */; };
 		55AE6DFC26102BEB00DF5921 /* Plane3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DEA26102BEB00DF5921 /* Plane3D.hpp */; };
 		55AE6DFD26102BEB00DF5921 /* LowLevelReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55AE6DEB26102BEB00DF5921 /* LowLevelReader.cpp */; };
+		55E2BAFE26122BA100270239 /* Triangulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E2BAFC26122BA100270239 /* Triangulator.cpp */; };
+		55E2BAFF26122BA100270239 /* Triangulator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55E2BAFD26122BA100270239 /* Triangulator.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,8 @@
 		55AE6DEA26102BEB00DF5921 /* Plane3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Plane3D.hpp; sourceTree = "<group>"; };
 		55AE6DEB26102BEB00DF5921 /* LowLevelReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LowLevelReader.cpp; sourceTree = "<group>"; };
 		55AE6E002610356900DF5921 /* GeoTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoTypes.h; sourceTree = "<group>"; };
+		55E2BAFC26122BA100270239 /* Triangulator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangulator.cpp; sourceTree = "<group>"; };
+		55E2BAFD26122BA100270239 /* Triangulator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangulator.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +103,8 @@
 				55AE6DDD26102BEB00DF5921 /* StlWriter.cpp */,
 				55AE6DDF26102BEB00DF5921 /* StlWriter.hpp */,
 				55AE6E002610356900DF5921 /* GeoTypes.h */,
+				55E2BAFC26122BA100270239 /* Triangulator.cpp */,
+				55E2BAFD26122BA100270239 /* Triangulator.hpp */,
 			);
 			path = SculpCore;
 			sourceTree = "<group>";
@@ -110,6 +116,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55E2BAFF26122BA100270239 /* Triangulator.hpp in Headers */,
 				55AE6DF926102BEB00DF5921 /* LowLevelWriter.hpp in Headers */,
 				55AE6DFA26102BEB00DF5921 /* IMesh.h in Headers */,
 				55AE6DEC26102BEB00DF5921 /* IGeometryEntity.hpp in Headers */,
@@ -186,6 +193,7 @@
 				55AE6DF826102BEB00DF5921 /* Plane3D.cpp in Sources */,
 				55AE6DF526102BEB00DF5921 /* LowLevelWriter.cpp in Sources */,
 				55AE6DED26102BEB00DF5921 /* CommonFunctions.cpp in Sources */,
+				55E2BAFE26122BA100270239 /* Triangulator.cpp in Sources */,
 				55AE6DF226102BEB00DF5921 /* IGeometryEntity.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -64,10 +64,13 @@ public:
     
     const std::vector<std::shared_ptr<Face>>& faces() const override { return _faces; }
     const std::vector<Vec3>& vertices() const override { return ParentDataPool::_vertices; }
-    const std::vector<Vec3>&    normals() const override { return ParentDataPool::_normals; }
+    const std::vector<Vec3>& normals() const override { return ParentDataPool::_normals; }
+    const std::vector<Vec3>& texture_vertices() const override { return ParentDataPool::_texture_vertices; }
     Vec3 getFaceNormal(const Face& face) const override;
     const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const override;
     bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) override;
+    
+    const std::vector<std::shared_ptr<Face>>& triangulated_faces() override;
     
 private:
     
@@ -83,6 +86,9 @@ private:
 private:
     
     std::vector<std::shared_ptr<Face>> _faces;
+    std::vector<std::shared_ptr<Face>> _triangulated_faces;
+    std::map<std::shared_ptr<Face>, std::shared_ptr<Face>> _triungulated_face_2_original;
+    
     std::map<std::shared_ptr<Face>, Vec4> _face_colors;
 };
 
