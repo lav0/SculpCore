@@ -330,6 +330,15 @@ const Vec4& MeshModel<T>::getFaceColor(const std::shared_ptr<GeoTypes::Face>& fa
         return face_color_pair->second;
     }
     
+    // could be triangulated face
+    if (!_triungulated_face_2_original.empty()) {
+        auto triface_2_origface = _triungulated_face_2_original.find(face);
+        face_color_pair = _face_colors.find(triface_2_origface->second);
+        if (face_color_pair != _face_colors.end()) {
+            return face_color_pair->second;
+        }
+    }
+    
     return v;
 }
 
@@ -340,6 +349,16 @@ bool MeshModel<T>::changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, c
     if (face_color_pair != _face_colors.end()) {
         face_color_pair->second = new_color;
         return true;
+    }
+    
+    // could be triangulated face
+    if (!_triungulated_face_2_original.empty()) {
+        auto triface_2_origface = _triungulated_face_2_original.find(face);
+        face_color_pair = _face_colors.find(triface_2_origface->second);
+        if (face_color_pair != _face_colors.end()) {
+            face_color_pair->second = new_color;
+            return true;
+        }
     }
     
     return false;
