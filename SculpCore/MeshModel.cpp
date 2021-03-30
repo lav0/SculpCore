@@ -43,6 +43,11 @@ void MeshModel<T>::fillInHelperContainer(const std::vector<Face>& faces)
     {
         _faces.push_back(std::make_shared<Face>(face));
         _face_colors.emplace(_faces.back(), GeoTypes::DEFAULT_COLOR);
+        
+        for (auto& fv : face)
+        {
+            ParentDataPool::_indices.push_back(fv.v);
+        }
     }
 }
 

@@ -36,6 +36,7 @@ struct DataPool
     std::vector<Vec3> _vertices;
     std::vector<Vec3> _texture_vertices;
     std::vector<Vec3> _normals;
+    std::vector<uint32_t> _indices;
 };
 
 struct Line3D
@@ -66,6 +67,7 @@ public:
     const std::vector<Vec3>& vertices() const override { return ParentDataPool::_vertices; }
     const std::vector<Vec3>& normals() const override { return ParentDataPool::_normals; }
     const std::vector<Vec3>& texture_vertices() const override { return ParentDataPool::_texture_vertices; }
+    const std::vector<uint32_t>& indices() const override { return ParentDataPool::_indices; }
     Vec3 getFaceNormal(const Face& face) const override;
     const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const override;
     bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) override;
