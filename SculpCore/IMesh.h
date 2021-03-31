@@ -38,6 +38,7 @@ public:
     virtual const std::vector<uint32_t>& indices() const = 0;
     virtual Vec3 getFaceNormal(const std::vector<FaceVertex>& face) const = 0;
     virtual const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const = 0;
+    virtual const Vec4& getVertexColor(size_t vertex_index) const = 0;
     virtual bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) = 0;
     
     virtual const std::vector<std::shared_ptr<std::vector<FaceVertex>>>& triangulated_faces() = 0;

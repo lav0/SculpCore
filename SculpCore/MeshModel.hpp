@@ -70,6 +70,7 @@ public:
     const std::vector<uint32_t>& indices() const override { return ParentDataPool::_indices; }
     Vec3 getFaceNormal(const Face& face) const override;
     const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const override;
+    const Vec4& getVertexColor(size_t vertex_index) const override;
     bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) override;
     
     const std::vector<std::shared_ptr<Face>>& triangulated_faces() override;
@@ -92,6 +93,7 @@ private:
     std::map<std::shared_ptr<Face>, std::shared_ptr<Face>> _triungulated_face_2_original;
     
     std::map<std::shared_ptr<Face>, Vec4> _face_colors;
+    std::vector<Vec4>                     _vertex_colors;
 };
 
 

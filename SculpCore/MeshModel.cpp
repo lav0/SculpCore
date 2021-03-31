@@ -49,6 +49,12 @@ void MeshModel<T>::fillInHelperContainer(const std::vector<Face>& faces)
             ParentDataPool::_indices.push_back(fv.v);
         }
     }
+    
+    _vertex_colors.reserve(ParentDataPool::_vertices.size());
+    for (size_t vertex_index=0; vertex_index < ParentDataPool::_vertices.size(); ++vertex_index)
+    {
+        _vertex_colors.push_back(DEFAULT_VERT_COLOR);
+    }
 }
 
 template <typename T>
@@ -345,6 +351,13 @@ const Vec4& MeshModel<T>::getFaceColor(const std::shared_ptr<GeoTypes::Face>& fa
     }
     
     return v;
+}
+
+template<typename T>
+const Vec4& MeshModel<T>::getVertexColor(size_t vertex_index) const
+{
+    assert(vertex_index < _vertex_colors.size());
+    return _vertex_colors[vertex_index];
 }
 
 template<typename T>

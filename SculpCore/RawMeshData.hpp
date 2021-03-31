@@ -32,9 +32,11 @@ public:
     const uint32_t* lowLevelFaceIds() const;
 
     uint64_t indicesCount() const;
+    
+    const std::vector<Shapr3D::Vec3>& vertices() { return _mesh->vertices(); }
 
     void changeColorForFace(uint32_t faceId);
-    void changeVertexColor(uint32_t vertexIndex);
+    void changeColorForVertex(uint32_t vertexIndex);
     
     uint32_t vertexCount() const;
     
