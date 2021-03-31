@@ -27,6 +27,8 @@
 		55AE6DFD26102BEB00DF5921 /* LowLevelReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55AE6DEB26102BEB00DF5921 /* LowLevelReader.cpp */; };
 		55E2BAFE26122BA100270239 /* Triangulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E2BAFC26122BA100270239 /* Triangulator.cpp */; };
 		55E2BAFF26122BA100270239 /* Triangulator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55E2BAFD26122BA100270239 /* Triangulator.hpp */; };
+		55E2BB1426135D6D00270239 /* RawMeshData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55E2BB1226135D6D00270239 /* RawMeshData.cpp */; };
+		55E2BB1526135D6D00270239 /* RawMeshData.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55E2BB1326135D6D00270239 /* RawMeshData.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		55AE6E002610356900DF5921 /* GeoTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoTypes.h; sourceTree = "<group>"; };
 		55E2BAFC26122BA100270239 /* Triangulator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangulator.cpp; sourceTree = "<group>"; };
 		55E2BAFD26122BA100270239 /* Triangulator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangulator.hpp; sourceTree = "<group>"; };
+		55E2BB1226135D6D00270239 /* RawMeshData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RawMeshData.cpp; sourceTree = "<group>"; };
+		55E2BB1326135D6D00270239 /* RawMeshData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RawMeshData.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 				55AE6E002610356900DF5921 /* GeoTypes.h */,
 				55E2BAFC26122BA100270239 /* Triangulator.cpp */,
 				55E2BAFD26122BA100270239 /* Triangulator.hpp */,
+				55E2BB1226135D6D00270239 /* RawMeshData.cpp */,
+				55E2BB1326135D6D00270239 /* RawMeshData.hpp */,
 			);
 			path = SculpCore;
 			sourceTree = "<group>";
@@ -122,6 +128,7 @@
 				55AE6DEC26102BEB00DF5921 /* IGeometryEntity.hpp in Headers */,
 				55AE6DFB26102BEB00DF5921 /* LowLevelReader.hpp in Headers */,
 				55AE6DFC26102BEB00DF5921 /* Plane3D.hpp in Headers */,
+				55E2BB1526135D6D00270239 /* RawMeshData.hpp in Headers */,
 				55AE6DF726102BEB00DF5921 /* ObjReader.hpp in Headers */,
 				55AE6DF426102BEB00DF5921 /* CommonTypes.h in Headers */,
 				55AE6DF126102BEB00DF5921 /* StlWriter.hpp in Headers */,
@@ -187,6 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				55AE6DF026102BEB00DF5921 /* ObjReader.cpp in Sources */,
+				55E2BB1426135D6D00270239 /* RawMeshData.cpp in Sources */,
 				55AE6DEF26102BEB00DF5921 /* StlWriter.cpp in Sources */,
 				55AE6DF326102BEB00DF5921 /* MeshModel.cpp in Sources */,
 				55AE6DFD26102BEB00DF5921 /* LowLevelReader.cpp in Sources */,
@@ -334,7 +342,7 @@
 				GCC_ENABLE_CPP_RTTI = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Debug;
 		};
@@ -348,7 +356,7 @@
 				GCC_ENABLE_CPP_RTTI = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
 			name = Release;
 		};
