@@ -19,7 +19,8 @@ void RawMeshData::updateBuffers()
 {
     _normals.clear();
     _vertices.clear();
-    _colors.clear();
+    _face_сolors.clear();
+    _vertex_colors.clear();
     _faces_ids.clear();
     
     auto faces = _mesh->triangulated_faces();
@@ -34,6 +35,8 @@ void RawMeshData::updateBuffers()
         color.x = X(face_color);
         color.y = Y(face_color);
         color.z = Z(face_color);
+        
+        vector_float4 vertex_color = {0.6f, 0, 0, 1.f};
 
         for (auto& fv : *f)
         {
@@ -42,7 +45,8 @@ void RawMeshData::updateBuffers()
 
             _normals.push_back(n);
             _vertices.push_back(v);
-            _colors.push_back(color);
+            _face_сolors.push_back(color);
+            _vertex_colors.push_back(vertex_color);
             _faces_ids.push_back(face_id);
         }
         
@@ -60,7 +64,11 @@ const float* RawMeshData::lowLevelNormals() const
 }
 const float* RawMeshData::lowLevelColors() const
 {
-    return reinterpret_cast<const float*>(_colors.data());
+    return reinterpret_cast<const float*>(_face_сolors.data());
+}
+const float* RawMeshData::lowLevelVertexColors() const
+{
+    return reinterpret_cast<const float*>(_vertex_colors.data());
 }
 
 const uint32_t* RawMeshData::lowLevelFaceIds() const
@@ -85,9 +93,9 @@ void RawMeshData::changeColorForFace(uint32_t faceId)
 void RawMeshData::changeVertexColor(uint32_t vertexIndex)
 {
     vector_float4 color = {0.05f, 0.9f, 0.05f};
-    _colors[vertexIndex] = color;
-    _colors[vertexIndex+1] = color;
-    _colors[vertexIndex+2] = color;
+    _face_сolors[vertexIndex] = color;
+    _face_сolors[vertexIndex+1] = color;
+    _face_сolors[vertexIndex+2] = color;
     
     updateBuffers();
 }

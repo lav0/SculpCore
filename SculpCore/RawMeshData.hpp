@@ -28,6 +28,7 @@ public:
     const float* lowLevelVertices() const;
     const float* lowLevelNormals() const;
     const float* lowLevelColors() const;
+    const float* lowLevelVertexColors() const;
     const uint32_t* lowLevelFaceIds() const;
 
     uint64_t indicesCount() const;
@@ -43,7 +44,8 @@ private:
     
     std::vector<Shapr3D::GeoTypes::Vec3> _vertices;
     std::vector<Shapr3D::GeoTypes::Vec3> _normals;
-    std::vector<vector_float4>        _colors;
+    std::vector<vector_float4>          _face_сolors;
+    std::vector<vector_float4>          _vertex_colors;
     std::vector<uint32_t>               _faces_ids;
 
 };
