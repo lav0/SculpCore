@@ -42,7 +42,7 @@ void MeshModel<T>::fillInHelperContainer(const std::vector<Face>& faces)
     for (auto& face : faces)
     {
         _faces.push_back(std::make_shared<Face>(face));
-        _face_colors.emplace(_faces.back(), GeoTypes::DEFAULT_COLOR);
+        _face_colors.emplace(_faces.back(), GeoTypes::DEFAULT_FACE_COLOR);
         
         for (auto& fv : face)
         {

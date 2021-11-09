@@ -19,8 +19,8 @@ namespace Shapr3D::GeoTypes {
     using Vec4 = boost::qvm::vec<float, 4>;
     using Mat4x4 = boost::qvm::mat<float,4,4>;
     
-    constexpr Vec4 DEFAULT_COLOR = {0.2, 0.2, 0.95, 1.0};
-    constexpr Vec4 DEFAULT_VERT_COLOR = {0.6f, 0, 0, 1.f};
+    constexpr Vec4 DEFAULT_FACE_COLOR = {0.2, 0.2, 0.82, 1.0};
+    constexpr Vec4 DEFAULT_VERT_COLOR = {0.f, 0.8, 0.f, 1.f};
 }
 
 #endif /* GeoTypes_h */
