@@ -112,4 +112,7 @@ void RawMeshData::changeColorForVertex(uint32_t vertexIndex)
     updateBuffers();
 }
 
-uint32_t RawMeshData::vertexCount() const { return _vertices.size(); }
+uint32_t RawMeshData::vertexCount() const
+{
+    return static_cast<uint32_t>(_vertices.size());
+}
