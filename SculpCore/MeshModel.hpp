@@ -63,7 +63,7 @@ public:
     bool isPointInside(const Vec3& point) const override;
     bool transform(const boost::qvm::mat<float,4,4> trs) override;
     
-    const std::vector<std::shared_ptr<Face>>& faces() const override { return _faces; }
+    const std::vector<std::shared_ptr<Face>>& faces() const override { return _mesh_faces; }
     const std::vector<Vec3>& vertices() const override { return ParentDataPool::_vertices; }
     const std::vector<Vec3>& normals() const override { return ParentDataPool::_normals; }
     const std::vector<Vec3>& texture_vertices() const override { return ParentDataPool::_texture_vertices; }
@@ -73,6 +73,7 @@ public:
     const Vec4& getVertexColor(size_t vertex_index) const override;
     bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) override;
     bool moveAlongNormal(const std::shared_ptr<GeoTypes::Face>& face, const float offset) override;
+    bool getFaceId(const std::shared_ptr<GeoTypes::Face>& face, uint32_t& faceid_out) const override;
     
     const std::vector<std::shared_ptr<Face>>& triangulated_faces() override;
     
@@ -89,9 +90,10 @@ private:
     
 private:
     
-    std::vector<std::shared_ptr<Face>> _faces;
+    std::vector<std::shared_ptr<Face>> _mesh_faces; // TODO: try use std::set<>
     std::vector<std::shared_ptr<Face>> _triangulated_faces;
     std::map<std::shared_ptr<Face>, std::shared_ptr<Face>> _triungulated_face_2_original;
+    std::map<std::shared_ptr<Face>, size_t> _faces_2_id;
     
     std::map<std::shared_ptr<Face>, Vec4> _face_colors;
     std::vector<Vec4>                     _vertex_colors;

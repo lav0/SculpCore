@@ -26,8 +26,6 @@ void RawMeshData::updateBuffers()
     auto faces = _mesh->triangulated_faces();
     auto verts = _mesh->vertices();
     
-    uint32_t face_id = 1;
-    
     for (auto& f : faces)
     {
         auto face_color = _mesh->getFaceColor(f);
@@ -36,8 +34,12 @@ void RawMeshData::updateBuffers()
         color.y = Y(face_color);
         color.z = Z(face_color);
         
-        vector_float4 vertex_color = {};
-
+        uint32_t face_id = 0;
+        if (!_mesh->getFaceId(f, face_id)) {
+            assert(false);
+            continue;
+        }
+        
         for (auto& fv : *f)
         {
             auto& n = _mesh->normals()[fv.vn];
@@ -48,8 +50,6 @@ void RawMeshData::updateBuffers()
             _face_сolors.push_back(color);
             _faces_ids.push_back(face_id);
         }
-        
-        ++face_id;
     }
     
     for (size_t vi=0; vi < vertices().size(); ++vi)
@@ -95,10 +95,8 @@ uint64_t RawMeshData::indicesCount() const
 
 void RawMeshData::changeColorForFace(uint32_t faceId)
 {
-    const std::shared_ptr<Shapr3D::GeoTypes::Face>& first_face = _mesh->triangulated_faces()[faceId];
-    
     Shapr3D::GeoTypes::Vec4 new_color = {0.9, 0.2, 0.2, 1.0};
-    _mesh->changeColorFor(first_face, new_color);
+    _mesh->changeColorFor(_mesh->faces()[faceId], new_color);
     
     updateBuffers();
 }
@@ -114,9 +112,9 @@ void RawMeshData::changeColorForVertex(uint32_t vertexIndex)
 
 void RawMeshData::moveFaceBy(uint32_t faceid, float offset)
 {
-    const auto& tface = _mesh->triangulated_faces()[faceid];
+    const auto& face = _mesh->faces()[faceid];
     
-    _mesh->moveAlongNormal(tface, offset);
+    _mesh->moveAlongNormal(face, offset);
     
     updateBuffers();
 }

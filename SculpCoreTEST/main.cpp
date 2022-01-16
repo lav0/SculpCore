@@ -9,6 +9,7 @@
 #include <cassert>
 #include <iterator>
 #include <boost/qvm/operations.hpp>
+#include "../SculpCore/MeshModel.hpp"
 #include "../SculpCore/RawMeshData.hpp"
 #include "../SculpCore/ObjReader.hpp"
 
@@ -82,7 +83,6 @@ bool meshModelFaceMoveAlongNormalTest(std::unique_ptr<IMesh>&& mesh) {
         auto& normal = norms[i];
         for (auto& facevert : *eachface) {
             auto& vertex = new_verts[facevert.v];
-            printf("  (%f, %f, %f)\n", vertex.a[0],vertex.a[1],vertex.a[2]);
             
             // as we dealing with a cube we get an offset from zero by along the normal
             auto side_offset = boost::qvm::dot(normal, vertex);
@@ -96,6 +96,40 @@ bool meshModelFaceMoveAlongNormalTest(std::unique_ptr<IMesh>&& mesh) {
     }
     
     assert(done);
+    printf("Face Move Along normal : success\n");
+    
+    return true;
+}
+
+bool meshModelTriangulateTest() {
+    
+    FaceVertex fv0; fv0.v = 0; fv0.vn = 1;
+    FaceVertex fv1; fv1.v = 0; fv1.vn = 1;
+    FaceVertex fv2; fv2.v = 0; fv2.vn = 1;
+    FaceVertex fv3; fv3.v = 0; fv3.vn = 1;
+    auto face = Face{fv0, fv1, fv2, fv3};
+    
+    const std::vector<Vec3> vertices = {Vec3{0, 0, 0}, Vec3{0, 1, 0}, Vec3{1, 1, 0}, Vec3{1, 0, 0}};
+    const std::vector<Vec3> texture_vertices = {};
+    const std::vector<Vec3> normals = {Vec3{0, 0, 1}};
+    const std::vector<Face> faces = { face };
+    
+    auto mesh = MeshModel<DataPool>(vertices, texture_vertices, normals, faces);
+    
+    auto tfaces = mesh.triangulated_faces();
+    
+    assert(tfaces.size() == 2);
+    
+    uint32_t faceid0 = 0, faceid1 = 0, faceid = 0;
+    bool validId = true;
+    validId &= mesh.getFaceId(tfaces[0], faceid0);
+    validId &= mesh.getFaceId(tfaces[1], faceid1);
+    validId &= mesh.getFaceId(mesh.faces()[0], faceid);
+    
+    assert(validId);
+    assert(faceid == faceid0);
+    assert(faceid == faceid1);
+    printf("Triangulate and Face IDs : success\n");
     
     return true;
 }
@@ -110,6 +144,7 @@ int main(int argc, const char * argv[]) {
     
     meshModelFaceColorChangeTest(reader2->load());
     meshModelFaceMoveAlongNormalTest(reader3->load());
+    meshModelTriangulateTest();
     
     auto indCount = raw_mesh_data->indicesCount();
     auto verCount = raw_mesh_data->vertexCount();

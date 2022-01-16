@@ -36,13 +36,18 @@ MeshModel<T>::MeshModel(const std::vector<Vec3>& vertices,
 template <typename T>
 void MeshModel<T>::fillInHelperContainer(const std::vector<Face>& faces)
 {
-    _faces.clear();
-    _faces.reserve(faces.size());
+    _mesh_faces.clear();
+    _mesh_faces.reserve(faces.size());
     
-    for (auto& face : faces)
+    for (size_t i=0; i<faces.size(); ++i)
     {
-        _faces.push_back(std::make_shared<Face>(face));
-        _face_colors.emplace(_faces.back(), GeoTypes::DEFAULT_FACE_COLOR);
+        auto& face = faces[i];
+        
+        auto pface = std::make_shared<Face>(face);
+        
+        _mesh_faces.push_back(pface);
+        _faces_2_id[pface] = i+1;
+        _face_colors.emplace(pface, GeoTypes::DEFAULT_FACE_COLOR);
         
         for (auto& fv : face)
         {
@@ -62,7 +67,7 @@ float MeshModel<T>::surfaceArea() const
 {
     auto surface_area = 0.f;
     
-    for (auto& p_face : _faces)
+    for (auto& p_face : _mesh_faces)
     {
         surface_area += CommonFunctions::getArea(*p_face, vertices());
     }
@@ -77,7 +82,7 @@ float MeshModel<T>::volume() const
     
     auto centre = Vec3({0,0,0});
         
-    for (auto& p_face : _faces)
+    for (auto& p_face : _mesh_faces)
     {
         auto normal = getFaceNormal(*p_face);
         
@@ -202,7 +207,7 @@ template <typename T>
 bool MeshModel<T>::isPointInside(const Vec3& point) const
 {
     auto getFirstFace = [this, &point]() {
-        for (auto& p_face : _faces) {
+        for (auto& p_face : _mesh_faces) {
             auto norm_along = faceGravityCentre(*p_face) - point;
             try {
                 normalize(norm_along);
@@ -213,7 +218,7 @@ bool MeshModel<T>::isPointInside(const Vec3& point) const
                 return p_face;
             }
         }
-        return _faces.front();
+        return _mesh_faces.front();
     };
     
     auto first = getFirstFace();
@@ -232,7 +237,7 @@ bool MeshModel<T>::isPointInside(const Vec3& point) const
     };
     std::set<Vec3, Vec3Cmp> intersections = {gc};
     
-    for (auto& p_face : _faces)
+    for (auto& p_face : _mesh_faces)
     {
         if (p_face.get() == first.get())
             continue;
@@ -369,16 +374,6 @@ bool MeshModel<T>::changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, c
         return true;
     }
     
-    // could be triangulated face
-    if (!_triungulated_face_2_original.empty()) {
-        auto triface_2_origface = _triungulated_face_2_original.find(face);
-        face_color_pair = _face_colors.find(triface_2_origface->second);
-        if (face_color_pair != _face_colors.end()) {
-            face_color_pair->second = new_color;
-            return true;
-        }
-    }
-    
     return false;
 }
 
@@ -411,7 +406,6 @@ const std::vector<std::shared_ptr<Face>>& MeshModel<T>::triangulated_faces()
     {
         _triungulated_face_2_original.clear();
         
-        auto& out_faces = _triangulated_faces;
         const auto& origin_faces = faces();
         
         bool mesh_has_changes = false;
@@ -426,6 +420,8 @@ const std::vector<std::shared_ptr<Face>>& MeshModel<T>::triangulated_faces()
                 _triungulated_face_2_original.emplace(p_origin_face, p_origin_face);
                 continue;
             }
+            
+            size_t faceid = _faces_2_id[p_origin_face];
             
             auto origin_face = *p_origin_face;
             
@@ -445,6 +441,7 @@ const std::vector<std::shared_ptr<Face>>& MeshModel<T>::triangulated_faces()
                 _triungulated_face_2_original.emplace(_triangulated_faces.back(),
                                                       p_origin_face
                                                       );
+                _faces_2_id[_triangulated_faces.back()] = faceid;
                 
                 secon_vx = third_vx;
                 
@@ -456,6 +453,19 @@ const std::vector<std::shared_ptr<Face>>& MeshModel<T>::triangulated_faces()
     }
     
     return _triangulated_faces;
+}
+
+template<typename T>
+bool MeshModel<T>::getFaceId(const std::shared_ptr<GeoTypes::Face>& face, uint32_t& faceid_out) const
+{
+    auto find_iter = _faces_2_id.find(face);
+    
+    if (find_iter != _faces_2_id.end()) {
+        faceid_out = find_iter->second;
+        return true;
+    }
+    
+    return false;
 }
 
 namespace Shapr3D {
