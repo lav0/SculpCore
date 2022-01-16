@@ -112,6 +112,15 @@ void RawMeshData::changeColorForVertex(uint32_t vertexIndex)
     updateBuffers();
 }
 
+void RawMeshData::moveFaceBy(uint32_t faceid, float offset)
+{
+    const auto& tface = _mesh->triangulated_faces()[faceid];
+    
+    _mesh->moveAlongNormal(tface, offset);
+    
+    updateBuffers();
+}
+
 uint32_t RawMeshData::vertexCount() const
 {
     return static_cast<uint32_t>(_vertices.size());

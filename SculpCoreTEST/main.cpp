@@ -13,11 +13,7 @@
 #include "../SculpCore/ObjReader.hpp"
 
 using namespace Shapr3D;
-void meshModelFaceColorChangeTest() {
-    std::string file_path("/Users/Andrey/Documents/dev/Xcode-projects/sculpMe/Resources/cube-small.obj");
-    auto reader = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
-    
-    auto mesh = reader->load();
+bool meshModelFaceColorChangeTest(std::unique_ptr<IMesh>&& mesh) {
     
     auto faces = mesh->faces();
     auto verts = mesh->vertices();
@@ -33,8 +29,9 @@ void meshModelFaceColorChangeTest() {
         assert(boost::qvm::mag(eachcolor - default_face_color) < 1e-4);
     }
     
-    mesh->changeColorFor(faces[0], new_color);
-    mesh->changeColorFor(faces[3], new_color1);
+    bool done = true;
+    done &= mesh->changeColorFor(faces[0], new_color);
+    done &= mesh->changeColorFor(faces[3], new_color1);
     
     for (size_t i=0; i<faces.size(); ++i) {
         auto& eachface = faces[i];
@@ -46,18 +43,73 @@ void meshModelFaceColorChangeTest() {
             assert(boost::qvm::mag(face_color - default_face_color) < 1e-4);
         }
     }
-     
-    printf("\n");
+    
+    assert(done);
+    printf("Face Color Chnage : success\n");
+    
+    return true;
+}
+
+bool meshModelFaceMoveAlongNormalTest(std::unique_ptr<IMesh>&& mesh) {
+    const auto& faces = mesh->faces();
+    const auto& verts = mesh->vertices();
+    const auto& norms = mesh->normals();
+    
+    assert(faces.size() == 6);
+    assert(verts.size() == 8);
+    assert(norms.size() == 6);
+
+    
+    for (size_t i=0; i<faces.size(); ++i) {
+        auto& eachface = faces[i];
+        auto& normal = norms[i];
+        for (auto& facevert : *eachface) {
+            auto& vertex = verts[facevert.v];
+            
+            // as we dealing with a cube we get an offset from zero by along the normal
+            auto side_offset = boost::qvm::dot(normal, vertex);
+            assert(fabs(side_offset - 0.2f) < 1e-4);
+        }
+    }
+    
+    float offset = 0.7f;
+    bool done = mesh->moveAlongNormal(faces[1], offset);
+    
+    auto new_verts = mesh->vertices();
+    
+    for (size_t i=0; i<faces.size(); ++i) {
+        auto& eachface = faces[i];
+        auto& normal = norms[i];
+        for (auto& facevert : *eachface) {
+            auto& vertex = new_verts[facevert.v];
+            printf("  (%f, %f, %f)\n", vertex.a[0],vertex.a[1],vertex.a[2]);
+            
+            // as we dealing with a cube we get an offset from zero by along the normal
+            auto side_offset = boost::qvm::dot(normal, vertex);
+            if (i==1) {
+                assert(fabs(side_offset - 0.9f) < 1e-4);
+            }
+            else {
+                assert(fabs(side_offset - 0.2f) < 1e-4);
+            }
+        }
+    }
+    
+    assert(done);
+    
+    return true;
 }
 
 int main(int argc, const char * argv[]) {
-    
-    meshModelFaceColorChangeTest();
-    
     std::string file_path("/Users/Andrey/Documents/dev/Xcode-projects/sculpMe/Resources/cube-small.obj");
-    auto reader = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
+    auto reader1 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
+    auto reader2 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
+    auto reader3 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
     
-    auto raw_mesh_data = new RawMeshData(reader->load());
+    auto raw_mesh_data = new RawMeshData(reader1->load());
+    
+    meshModelFaceColorChangeTest(reader2->load());
+    meshModelFaceMoveAlongNormalTest(reader3->load());
     
     auto indCount = raw_mesh_data->indicesCount();
     auto verCount = raw_mesh_data->vertexCount();

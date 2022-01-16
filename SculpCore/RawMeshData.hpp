@@ -37,6 +37,7 @@ public:
 
     void changeColorForFace(uint32_t faceId);
     void changeColorForVertex(uint32_t vertexIndex);
+    void moveFaceBy(uint32_t faceid, float offset);
     
     uint32_t vertexCount() const;
     

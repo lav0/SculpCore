@@ -383,6 +383,28 @@ bool MeshModel<T>::changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, c
 }
 
 template<typename T>
+bool MeshModel<T>::moveAlongNormal(const std::shared_ptr<GeoTypes::Face>& face, const float offset)
+{
+    // preconditions
+    // TODO: tmp : need to make sure the face belongs to this mesh
+    for (auto& facevert : *face) {
+        // TODO: tmp : make sure all face's vertices have same normals
+    }
+    
+    if (offset <= 0) {
+        return false; // tmp
+    }
+    
+    auto normal = ParentDataPool::_normals[face->front().vn];
+    
+    for (auto& facevert : *face) {
+        ParentDataPool::_vertices[facevert.v] += normal * offset;
+    }
+    
+    return true;
+}
+
+template<typename T>
 const std::vector<std::shared_ptr<Face>>& MeshModel<T>::triangulated_faces()
 {
     if (_triangulated_faces.empty())

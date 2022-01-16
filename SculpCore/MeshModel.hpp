@@ -72,6 +72,7 @@ public:
     const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const override;
     const Vec4& getVertexColor(size_t vertex_index) const override;
     bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) override;
+    bool moveAlongNormal(const std::shared_ptr<GeoTypes::Face>& face, const float offset) override;
     
     const std::vector<std::shared_ptr<Face>>& triangulated_faces() override;
     
