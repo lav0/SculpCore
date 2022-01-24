@@ -39,11 +39,9 @@ public:
     virtual Vec3 getFaceNormal(const std::vector<FaceVertex>& face) const = 0;
     virtual const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const = 0;
     virtual const Vec4& getVertexColor(size_t vertex_index) const = 0;
-    virtual bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) = 0;
-    virtual bool moveAlongNormal(const std::shared_ptr<GeoTypes::Face>& face, const float offset) = 0;
+    virtual bool changeColorFor(const uint32_t& faceid, const Vec4& new_color) = 0;
+    virtual bool moveAlongNormal(const uint32_t& faceid, const float offset) = 0;
     virtual bool getFaceId(const std::shared_ptr<GeoTypes::Face>& face, uint32_t& faceid_out) const = 0;
-    
-    virtual const std::vector<std::shared_ptr<std::vector<FaceVertex>>>& triangulated_faces() = 0;
     
 };
 

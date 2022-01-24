@@ -46,7 +46,6 @@ void MeshModel<T>::fillInHelperContainer(const std::vector<Face>& faces)
         auto pface = std::make_shared<Face>(face);
         
         _mesh_faces.push_back(pface);
-        _faces_2_id[pface] = i+1;
         _face_colors.emplace(pface, GeoTypes::DEFAULT_FACE_COLOR);
         
         for (auto& fv : face)
@@ -346,15 +345,6 @@ const Vec4& MeshModel<T>::getFaceColor(const std::shared_ptr<GeoTypes::Face>& fa
         return face_color_pair->second;
     }
     
-    // could be triangulated face
-    if (!_triungulated_face_2_original.empty()) {
-        auto triface_2_origface = _triungulated_face_2_original.find(face);
-        face_color_pair = _face_colors.find(triface_2_origface->second);
-        if (face_color_pair != _face_colors.end()) {
-            return face_color_pair->second;
-        }
-    }
-    
     return v;
 }
 
@@ -366,8 +356,9 @@ const Vec4& MeshModel<T>::getVertexColor(size_t vertex_index) const
 }
 
 template<typename T>
-bool MeshModel<T>::changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color)
+bool MeshModel<T>::changeColorFor(const uint32_t& faceid, const Vec4& new_color)
 {
+    auto face = faceBy(faceid);
     auto face_color_pair = _face_colors.find(face);
     if (face_color_pair != _face_colors.end()) {
         face_color_pair->second = new_color;
@@ -378,10 +369,14 @@ bool MeshModel<T>::changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, c
 }
 
 template<typename T>
-bool MeshModel<T>::moveAlongNormal(const std::shared_ptr<GeoTypes::Face>& face, const float offset)
+bool MeshModel<T>::moveAlongNormal(const uint32_t& faceid, const float offset)
 {
-    // preconditions
-    // TODO: tmp : need to make sure the face belongs to this mesh
+    auto face = faceBy(faceid);
+    
+    if (nullptr == face) {
+        return false;
+    }
+    
     for (auto& facevert : *face) {
         // TODO: tmp : make sure all face's vertices have same normals
     }
@@ -400,72 +395,26 @@ bool MeshModel<T>::moveAlongNormal(const std::shared_ptr<GeoTypes::Face>& face, 
 }
 
 template<typename T>
-const std::vector<std::shared_ptr<Face>>& MeshModel<T>::triangulated_faces()
-{
-    if (_triangulated_faces.empty())
-    {
-        _triungulated_face_2_original.clear();
-        
-        const auto& origin_faces = faces();
-        
-        bool mesh_has_changes = false;
-        
-        for (auto& p_origin_face : origin_faces)
-        {
-            assert(p_origin_face->size() >= 3);
-            
-            if (p_origin_face->size() == 3)
-            {
-                _triangulated_faces.push_back(p_origin_face);
-                _triungulated_face_2_original.emplace(p_origin_face, p_origin_face);
-                continue;
-            }
-            
-            size_t faceid = _faces_2_id[p_origin_face];
-            
-            auto origin_face = *p_origin_face;
-            
-            auto pivot_vx = origin_face[0];
-            auto secon_vx = origin_face[1];
-            
-            for (size_t i=2; i<origin_face.size(); ++i)
-            {
-                auto third_vx = origin_face[i];
-                
-                Face new_face(3);
-                new_face[0] = pivot_vx;
-                new_face[1] = secon_vx;
-                new_face[2] = third_vx;
-                
-                _triangulated_faces.push_back(std::make_shared<Face>(new_face));
-                _triungulated_face_2_original.emplace(_triangulated_faces.back(),
-                                                      p_origin_face
-                                                      );
-                _faces_2_id[_triangulated_faces.back()] = faceid;
-                
-                secon_vx = third_vx;
-                
-                if (i == 3)
-                    mesh_has_changes = true;
-            }
-            
-        }
-    }
-    
-    return _triangulated_faces;
-}
-
-template<typename T>
 bool MeshModel<T>::getFaceId(const std::shared_ptr<GeoTypes::Face>& face, uint32_t& faceid_out) const
 {
-    auto find_iter = _faces_2_id.find(face);
+    auto itr = std::find(_mesh_faces.begin(), _mesh_faces.end(), face);
     
-    if (find_iter != _faces_2_id.end()) {
-        faceid_out = find_iter->second;
+    if (itr != _mesh_faces.end()) {
+        faceid_out = itr - _mesh_faces.begin();
         return true;
     }
     
     return false;
+}
+
+template<typename T>
+std::shared_ptr<Face> MeshModel<T>::faceBy(uint32_t faceid) const
+{
+    if (faceid < 0 || faceid >= _mesh_faces.size()) {
+        return nullptr;
+    }
+    
+    return _mesh_faces[faceid];
 }
 
 namespace Shapr3D {

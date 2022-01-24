@@ -7,6 +7,7 @@
 
 #include "ObjReader.hpp"
 #include "MeshModel.hpp"
+#include "TrianMeshModel.hpp" // tmp
 #include "LowLevelReader.hpp"
 #include <boost/algorithm/string.hpp>
 
@@ -41,9 +42,9 @@ std::unique_ptr<IMesh> ObjReader<VT, FT>::load()
 
 template <typename V, typename F>
 void ObjReader<V, F>::loadMesh(std::vector<V>& vertices,
-                         std::vector<V>& vertex_textures,
-                         std::vector<V>& normals,
-                         std::vector<F>& faces) 
+                               std::vector<V>& vertex_textures,
+                               std::vector<V>& normals,
+                               std::vector<F>& faces)
 {
     vertices.clear();
     vertex_textures.clear();

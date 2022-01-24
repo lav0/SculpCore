@@ -10,6 +10,7 @@
 #include <iterator>
 #include <boost/qvm/operations.hpp>
 #include "../SculpCore/MeshModel.hpp"
+#include "../SculpCore/TrianMeshModel.hpp"
 #include "../SculpCore/RawMeshData.hpp"
 #include "../SculpCore/ObjReader.hpp"
 
@@ -31,8 +32,10 @@ bool meshModelFaceColorChangeTest(std::unique_ptr<IMesh>&& mesh) {
     }
     
     bool done = true;
-    done &= mesh->changeColorFor(faces[0], new_color);
-    done &= mesh->changeColorFor(faces[3], new_color1);
+    uint32_t face0_id; mesh->getFaceId(faces[0], face0_id);
+    uint32_t face3_id; mesh->getFaceId(faces[3], face3_id);
+    done &= mesh->changeColorFor(face0_id, new_color);
+    done &= mesh->changeColorFor(face3_id, new_color1);
     
     for (size_t i=0; i<faces.size(); ++i) {
         auto& eachface = faces[i];
@@ -74,7 +77,8 @@ bool meshModelFaceMoveAlongNormalTest(std::unique_ptr<IMesh>&& mesh) {
     }
     
     float offset = 0.7f;
-    bool done = mesh->moveAlongNormal(faces[1], offset);
+    uint32_t faceid1; mesh->getFaceId(faces[1], faceid1);
+    bool done = mesh->moveAlongNormal(faceid1, offset);
     
     auto new_verts = mesh->vertices();
     
@@ -114,9 +118,9 @@ bool meshModelTriangulateTest() {
     const std::vector<Vec3> normals = {Vec3{0, 0, 1}};
     const std::vector<Face> faces = { face };
     
-    auto mesh = MeshModel<DataPool>(vertices, texture_vertices, normals, faces);
+    auto mesh = TrianMeshModel<DataPool>(vertices, texture_vertices, normals, faces, 1);
     
-    auto tfaces = mesh.triangulated_faces();
+    auto tfaces = mesh.faces();
     
     assert(tfaces.size() == 2);
     
@@ -152,8 +156,8 @@ int main(int argc, const char * argv[]) {
     const uint32_t* faceids = raw_mesh_data->lowLevelFaceIds();
     simd_float4 v0 = {vertices[0], vertices[1], vertices[2], 1};
     
-    assert(verCount == 36);
-    assert(indCount == 36);
+    assert(verCount == 24);
+    assert(indCount == 24);
 
     auto a = simd_length(v0.xyz);
     auto b = sqrt(3*0.2*0.2);

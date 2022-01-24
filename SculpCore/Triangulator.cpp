@@ -6,7 +6,7 @@
 //
 
 #include "Triangulator.hpp"
-#include "MeshModel.hpp"
+#include "TrianMeshModel.hpp"
 
 
 using namespace Shapr3D;
@@ -22,11 +22,11 @@ std::unique_ptr<IMesh> Triangulator::triangulated_mesh() const
     std::vector<F> faces;
     triangulate(faces);
     
-    return std::make_unique<MeshModel<Shapr3D::DataPool>>(_inmesh.vertices(),
-                                                          _inmesh.texture_vertices(),
-                                                          _inmesh.normals(),
-                                                          faces
-                                                          );
+    return std::make_unique<TrianMeshModel<Shapr3D::DataPool>>(_inmesh.vertices(),
+                                                               _inmesh.texture_vertices(),
+                                                               _inmesh.normals(),
+                                                               faces, 0
+                                                               );
 }
 
 bool Triangulator::triangulate(std::vector<F>& faces) const

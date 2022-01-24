@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		552ECB2D27940DC70082695C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 552ECB2C27940DC70082695C /* main.cpp */; };
-		552ECB3227940DE50082695C /* libSculpCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55AE6DB3261028EC00DF5921 /* libSculpCore.a */; };
+		5538D03D279EE4F8007E1665 /* TrianMeshModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5538D03B279EE4F8007E1665 /* TrianMeshModel.cpp */; };
+		5538D03E279EE4F8007E1665 /* TrianMeshModel.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 5538D03C279EE4F8007E1665 /* TrianMeshModel.hpp */; };
+		5538D045279EEF6E007E1665 /* libSculpCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55AE6DB3261028EC00DF5921 /* libSculpCore.a */; };
 		55AE6DEC26102BEB00DF5921 /* IGeometryEntity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DDA26102BEB00DF5921 /* IGeometryEntity.hpp */; };
 		55AE6DED26102BEB00DF5921 /* CommonFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55AE6DDB26102BEB00DF5921 /* CommonFunctions.cpp */; };
 		55AE6DEE26102BEB00DF5921 /* CommonFunctions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DDC26102BEB00DF5921 /* CommonFunctions.hpp */; };
@@ -34,7 +36,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		552ECB3327940DF10082695C /* PBXContainerItemProxy */ = {
+		5538D040279EEDF7007E1665 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 55AE6DAB261028EC00DF5921 /* Project object */;
 			proxyType = 1;
@@ -58,6 +60,8 @@
 /* Begin PBXFileReference section */
 		552ECB2A27940DC70082695C /* SculpCoreTEST */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SculpCoreTEST; sourceTree = BUILT_PRODUCTS_DIR; };
 		552ECB2C27940DC70082695C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		5538D03B279EE4F8007E1665 /* TrianMeshModel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TrianMeshModel.cpp; sourceTree = "<group>"; };
+		5538D03C279EE4F8007E1665 /* TrianMeshModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TrianMeshModel.hpp; sourceTree = "<group>"; };
 		55AE6DB3261028EC00DF5921 /* libSculpCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSculpCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		55AE6DDA26102BEB00DF5921 /* IGeometryEntity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IGeometryEntity.hpp; sourceTree = "<group>"; };
 		55AE6DDB26102BEB00DF5921 /* CommonFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CommonFunctions.cpp; sourceTree = "<group>"; };
@@ -89,7 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				552ECB3227940DE50082695C /* libSculpCore.a in Frameworks */,
+				5538D045279EEF6E007E1665 /* libSculpCore.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +156,8 @@
 				55AE6DE726102BEB00DF5921 /* LowLevelWriter.hpp */,
 				55AE6DE126102BEB00DF5921 /* MeshModel.cpp */,
 				55AE6DE426102BEB00DF5921 /* MeshModel.hpp */,
+				5538D03B279EE4F8007E1665 /* TrianMeshModel.cpp */,
+				5538D03C279EE4F8007E1665 /* TrianMeshModel.hpp */,
 				55AE6DDE26102BEB00DF5921 /* ObjReader.cpp */,
 				55AE6DE526102BEB00DF5921 /* ObjReader.hpp */,
 				55AE6DE626102BEB00DF5921 /* Plane3D.cpp */,
@@ -177,6 +183,7 @@
 				55E2BAFF26122BA100270239 /* Triangulator.hpp in Headers */,
 				55AE6DF926102BEB00DF5921 /* LowLevelWriter.hpp in Headers */,
 				55AE6DFA26102BEB00DF5921 /* IMesh.h in Headers */,
+				5538D03E279EE4F8007E1665 /* TrianMeshModel.hpp in Headers */,
 				55AE6DEC26102BEB00DF5921 /* IGeometryEntity.hpp in Headers */,
 				55AE6DFB26102BEB00DF5921 /* LowLevelReader.hpp in Headers */,
 				55AE6DFC26102BEB00DF5921 /* Plane3D.hpp in Headers */,
@@ -203,7 +210,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				552ECB3427940DF10082695C /* PBXTargetDependency */,
+				5538D041279EEDF7007E1665 /* PBXTargetDependency */,
 			);
 			name = SculpCoreTEST;
 			productName = SculpCoreTEST;
@@ -281,6 +288,7 @@
 				55AE6DF326102BEB00DF5921 /* MeshModel.cpp in Sources */,
 				55AE6DFD26102BEB00DF5921 /* LowLevelReader.cpp in Sources */,
 				55AE6DF826102BEB00DF5921 /* Plane3D.cpp in Sources */,
+				5538D03D279EE4F8007E1665 /* TrianMeshModel.cpp in Sources */,
 				55AE6DF526102BEB00DF5921 /* LowLevelWriter.cpp in Sources */,
 				55AE6DED26102BEB00DF5921 /* CommonFunctions.cpp in Sources */,
 				55E2BAFE26122BA100270239 /* Triangulator.cpp in Sources */,
@@ -291,10 +299,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		552ECB3427940DF10082695C /* PBXTargetDependency */ = {
+		5538D041279EEDF7007E1665 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 55AE6DB2261028EC00DF5921 /* SculpCore */;
-			targetProxy = 552ECB3327940DF10082695C /* PBXContainerItemProxy */;
+			targetProxy = 5538D040279EEDF7007E1665 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -451,6 +459,7 @@
 		55AE6DBF261028EC00DF5921 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M6CM7H2F7D;
 				EXECUTABLE_PREFIX = lib;
@@ -459,12 +468,14 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTS_MACCATALYST = YES;
 			};
 			name = Debug;
 		};
 		55AE6DC0261028EC00DF5921 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M6CM7H2F7D;
 				EXECUTABLE_PREFIX = lib;
@@ -473,6 +484,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SUPPORTS_MACCATALYST = YES;
 			};
 			name = Release;
 		};

@@ -71,11 +71,9 @@ public:
     Vec3 getFaceNormal(const Face& face) const override;
     const Vec4& getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const override;
     const Vec4& getVertexColor(size_t vertex_index) const override;
-    bool changeColorFor(const std::shared_ptr<GeoTypes::Face>& face, const Vec4& new_color) override;
-    bool moveAlongNormal(const std::shared_ptr<GeoTypes::Face>& face, const float offset) override;
+    bool changeColorFor(const uint32_t& faceid, const Vec4& new_color) override;
+    bool moveAlongNormal(const uint32_t& faceid, const float offset) override;
     bool getFaceId(const std::shared_ptr<GeoTypes::Face>& face, uint32_t& faceid_out) const override;
-    
-    const std::vector<std::shared_ptr<Face>>& triangulated_faces() override;
     
 private:
     
@@ -88,12 +86,11 @@ private:
     float getDistanceToFaceFrom(const Vec3& point, const Face& face) const;
     bool isPointInsideFace(const Vec3& point, const Face& face) const;
     
-private:
+    std::shared_ptr<Face> faceBy(uint32_t faceid) const;
+    
+protected:
     
     std::vector<std::shared_ptr<Face>> _mesh_faces; // TODO: try use std::set<>
-    std::vector<std::shared_ptr<Face>> _triangulated_faces;
-    std::map<std::shared_ptr<Face>, std::shared_ptr<Face>> _triungulated_face_2_original;
-    std::map<std::shared_ptr<Face>, size_t> _faces_2_id;
     
     std::map<std::shared_ptr<Face>, Vec4> _face_colors;
     std::vector<Vec4>                     _vertex_colors;
