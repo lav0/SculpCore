@@ -17,7 +17,7 @@ const std::vector<std::shared_ptr<Face>>& TrianMeshModel<T>::triangulated_faces(
     {
         _triungulated_face_2_original.clear();
         
-        const auto& origin_faces = MeshModel<T>::faces();
+        const auto& origin_faces = _stored_mesh->faces();
         
         bool mesh_has_changes = false;
         
@@ -82,28 +82,21 @@ bool TrianMeshModel<T>::getFaceId(const std::shared_ptr<GeoTypes::Face>& face, u
 template<typename T>
 const Vec4& TrianMeshModel<T>::getFaceColor(const std::shared_ptr<GeoTypes::Face>& face) const
 {
-    static Vec4 v = {0, 0, 0, 1};
-    
-    auto triface_2_origface = _triungulated_face_2_original.find(face);
-    auto face_color_pair = MeshModel<T>::_face_colors.find(triface_2_origface->second);
-    if (face_color_pair != MeshModel<T>::_face_colors.end()) {
-        return face_color_pair->second;
-    }
-    
     // TODO: use bool as return
-    return v;
+    auto triface_2_origface = _triungulated_face_2_original.find(face);
+    return _stored_mesh->getFaceColor(triface_2_origface->second);
 }
 
 template<typename T>
 bool TrianMeshModel<T>::changeColorFor(const uint32_t& faceid, const Vec4& new_color)
 {
-    return MeshModel<T>::changeColorFor(faceid - _face_id_offset, new_color);
+    return _stored_mesh->changeColorFor(faceid - _face_id_offset, new_color);
 }
 
 template<typename T>
 bool TrianMeshModel<T>::moveAlongNormal(const uint32_t& faceid, const float offset)
 {
-    return MeshModel<T>::moveAlongNormal(faceid - _face_id_offset, offset);
+    return _stored_mesh->moveAlongNormal(faceid - _face_id_offset, offset);
 }
 
 

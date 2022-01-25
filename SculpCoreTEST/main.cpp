@@ -138,17 +138,34 @@ bool meshModelTriangulateTest() {
     return true;
 }
 
+bool trianMeshModelByIMesh(std::unique_ptr<IMesh>&& mesh)
+{
+    std::shared_ptr<IMesh> omesh = std::move(mesh);
+    auto tmesh = std::make_unique< TrianMeshModel<DataPool> >(omesh, 1);
+    
+    auto msize = omesh->faces().size();
+    auto tsize = tmesh->faces().size();
+    
+    assert(msize == 6);
+    assert(tsize == 12);
+    
+    printf("TrianMeshModel by IMesh : success\n");
+    return true;
+}
+
 int main(int argc, const char * argv[]) {
     std::string file_path("/Users/Andrey/Documents/dev/Xcode-projects/sculpMe/Resources/cube-small.obj");
     auto reader1 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
     auto reader2 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
     auto reader3 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
+    auto reader4 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
     
     auto raw_mesh_data = new RawMeshData(reader1->load());
     
     meshModelFaceColorChangeTest(reader2->load());
     meshModelFaceMoveAlongNormalTest(reader3->load());
     meshModelTriangulateTest();
+    trianMeshModelByIMesh(reader4->load());
     
     auto indCount = raw_mesh_data->indicesCount();
     auto verCount = raw_mesh_data->vertexCount();
