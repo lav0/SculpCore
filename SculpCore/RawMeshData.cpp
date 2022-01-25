@@ -21,6 +21,7 @@ void RawMeshData::updateBuffers()
 {
     _normals.clear();
     _vertices.clear();
+    _originalVertices.clear();
     _face_сolors.clear();
     _vertex_colors.clear();
     _faces_ids.clear();
@@ -29,6 +30,8 @@ void RawMeshData::updateBuffers()
     {
         auto faces = mesh->faces();
         auto verts = mesh->vertices();
+        
+        _originalVertices.insert(_originalVertices.end(), verts.begin(), verts.end());
         
         for (auto& f : faces)
         {

@@ -33,9 +33,8 @@ public:
 
     uint64_t indicesCount() const;
     
-    const std::vector<Shapr3D::Vec3>& vertices() {
-//        return _mesh->vertices();
-        return _tmeshes.front()->vertices();
+    const std::vector<Shapr3D::Vec3>& vertices() const {
+        return _originalVertices;
     }
 
     void changeColorForFace(uint32_t faceId);
@@ -51,6 +50,7 @@ private:
     std::vector<ShTrianMeshModel>   _tmeshes;
     
     std::vector<Shapr3D::GeoTypes::Vec3> _vertices;
+    std::vector<Shapr3D::GeoTypes::Vec3> _originalVertices;
     std::vector<Shapr3D::GeoTypes::Vec3> _normals;
     std::vector<vector_float4>          _face_сolors;
     std::vector<vector_float4>          _vertex_colors;
