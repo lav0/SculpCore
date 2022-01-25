@@ -143,11 +143,88 @@ bool trianMeshModelByIMesh(std::unique_ptr<IMesh>&& mesh)
     std::shared_ptr<IMesh> omesh = std::move(mesh);
     auto tmesh = std::make_unique< TrianMeshModel<DataPool> >(omesh, 1);
     
-    auto msize = omesh->faces().size();
-    auto tsize = tmesh->faces().size();
+    auto& overtices = omesh->vertices();
+    auto ofaces = omesh->faces();
+    auto& tvertices = tmesh->vertices();
+    auto tfaces = tmesh->faces();
     
-    assert(msize == 6);
-    assert(tsize == 12);
+    assert(ofaces.size() == 6);
+    assert(tfaces.size() == 12);
+    
+    assert(overtices.size() == 8);
+    assert(tvertices.size() == 8);
+    
+    auto test_vertices = std::vector<Vec3>{
+        Vec3({0.200000, 0.200000, -0.200000}),
+        Vec3({0.200000, -0.200000, -0.200000}),
+        Vec3({-0.200000, -0.200000, -0.200000}),
+        Vec3({-0.200000, 0.200000, -0.200000}),
+        Vec3({0.200000, 0.200000, 0.200000}),
+        Vec3({0.200000, -0.200000, 0.200000}),
+        Vec3({-0.200000, -0.200000, 0.200000}),
+        Vec3({-0.200000, 0.200000, 0.200000})
+    };
+    
+    for (size_t i=0; i<overtices.size(); ++i) {
+        bool oeq = boost::qvm::mag(overtices[i] - test_vertices[i]) < 1e-4;
+        bool teq = boost::qvm::mag(tvertices[i] - test_vertices[i]) < 1e-4;
+        assert(oeq);
+        assert(teq);
+    }
+    
+    // check if triangulated faces point to the same vertices as origin mesh
+    for (auto& tface : tfaces)
+    {
+        for (auto& face_vertex : *(tface)) {
+            auto vidx = face_vertex.v;
+            auto ov = overtices[vidx];
+            auto tv = tvertices[vidx];
+                
+            bool eq = boost::qvm::mag(ov - tv) < 1e-4;
+            assert(eq);
+        }
+    }
+    // now check if origin faces point to the triangulated mesh vertices
+    for (auto& oface : ofaces)
+    {
+        for (auto& face_vertex : *(oface)) {
+            auto vidx = face_vertex.v;
+            auto ov = overtices[vidx];
+            auto tv = tvertices[vidx];
+            
+            bool eq = boost::qvm::mag(ov - tv) < 1e-4;
+            assert(eq);
+        }
+    }
+    
+    tmesh->moveAlongNormal(3, 1.f);
+    
+    std::set<size_t> exceptions = {0, 1, 4, 5};
+    for (size_t i=0; i<overtices.size(); ++i) {
+        bool oeq = boost::qvm::mag(overtices[i] - test_vertices[i]) < 1e-4;
+        bool teq = boost::qvm::mag(tvertices[i] - test_vertices[i]) < 1e-4;
+        assert(oeq == teq);
+        if (exceptions.count(i) == 0) {
+            assert(oeq);
+        }
+        else {
+            assert(!oeq);
+        }
+    }
+    
+    omesh.reset();
+    
+    auto pface0 = tmesh->faces()[0];
+    auto pface1 = tmesh->faces()[1];
+    
+    uint32_t faceid0=0, faceid1=0;
+    bool valid0 = tmesh->getFaceId(pface0, faceid0);
+    bool valid1 = tmesh->getFaceId(pface1, faceid1);
+    
+    assert(valid0);
+    assert(valid1);
+    assert(faceid1 == faceid0);
+    assert(faceid1 == 1);
     
     printf("TrianMeshModel by IMesh : success\n");
     return true;

@@ -57,16 +57,16 @@ public:
     //
     // go through methods
     //
-    float surfaceArea() const override { return _stored_mesh->surfaceArea(); }
-    float volume() const override { return _stored_mesh->volume(); }
-    bool isPointInside(const Vec3& point) const override  { return _stored_mesh->isPointInside(point); }
+    float surfaceArea() const override                            { return _stored_mesh->surfaceArea(); }
+    float volume() const override                                 { return _stored_mesh->volume(); }
+    bool isPointInside(const Vec3& point) const override          { return _stored_mesh->isPointInside(point); }
     bool transform(const boost::qvm::mat<float,4,4> trs) override { return _stored_mesh->transform(trs); }
     
-    const std::vector<Vec3>& vertices() const override { return _stored_mesh->vertices(); }
-    const std::vector<Vec3>& normals() const override { return _stored_mesh->normals(); }
-    const std::vector<Vec3>& texture_vertices() const override { return _stored_mesh->texture_vertices(); }
-    const std::vector<uint32_t>& indices() const override { return _stored_mesh->indices(); }
-    Vec3 getFaceNormal(const Face& face) const override { return _stored_mesh->getFaceNormal(face); } // tmp : qqq ??
+    const std::vector<Vec3>& vertices() const override             { return _stored_mesh->vertices(); }
+    const std::vector<Vec3>& normals() const override              { return _stored_mesh->normals(); }
+    const std::vector<Vec3>& texture_vertices() const override     { return _stored_mesh->texture_vertices(); }
+    const std::vector<uint32_t>& indices() const override          { return _stored_mesh->indices(); }
+    Vec3 getFaceNormal(const Face& face) const override            { return _stored_mesh->getFaceNormal(face); } // tmp : qqq ??
     const Vec4& getVertexColor(size_t vertex_index) const override { return _stored_mesh->getVertexColor(vertex_index); }
     
 private:
