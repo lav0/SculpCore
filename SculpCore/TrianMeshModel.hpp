@@ -37,14 +37,6 @@ public:
         postInit();
     }
     
-    void postInit() {
-        auto& ofaces = _stored_mesh->faces(); // original faces
-        for (size_t idx=0; idx<ofaces.size(); ++idx) {
-            _faces_2_id[ofaces[idx]] = idx + _face_id_offset;
-        }
-        
-        triangulated_faces();
-    }
     
     const std::vector<std::shared_ptr<Face>>& faces() const override { return _triangulated_faces; }
     
@@ -71,6 +63,7 @@ public:
     
 private:
     
+    void postInit();
     const std::vector<std::shared_ptr<Face>>& triangulated_faces();
     
 private:

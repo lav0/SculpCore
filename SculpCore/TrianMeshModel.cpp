@@ -9,6 +9,15 @@
 
 using namespace Shapr3D;
 
+template<typename T>
+void TrianMeshModel<T>::postInit() {
+    auto& ofaces = _stored_mesh->faces(); // original faces
+    for (size_t idx=0; idx<ofaces.size(); ++idx) {
+        _faces_2_id[ofaces[idx]] = idx + _face_id_offset;
+    }
+    
+    triangulated_faces();
+}
 
 template<typename T>
 const std::vector<std::shared_ptr<Face>>& TrianMeshModel<T>::triangulated_faces()

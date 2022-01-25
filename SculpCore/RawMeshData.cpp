@@ -7,9 +7,13 @@
 
 #include "RawMeshData.hpp"
 
-RawMeshData::RawMeshData(std::unique_ptr<Shapr3D::IMesh>&& mesh)
-: _mesh(std::move(mesh))
+using namespace Shapr3D;
+
+RawMeshData::RawMeshData(std::unique_ptr<IMesh>&& mesh)
 {
+    std::shared_ptr<IMesh> omesh = std::move(mesh);
+    _tmeshes.push_back(std::make_shared< TrianMeshModel<DataPool> >(omesh, 1));
+    
     updateBuffers();
 }
 
@@ -21,46 +25,49 @@ void RawMeshData::updateBuffers()
     _vertex_colors.clear();
     _faces_ids.clear();
     
-    auto faces = _mesh->faces();
-    auto verts = _mesh->vertices();
-    
-    for (auto& f : faces)
+    for (auto& mesh : _tmeshes)
     {
-        auto face_color = _mesh->getFaceColor(f);
-        vector_float4 color = {0, 0, 0, 1.f};
-        color.x = X(face_color);
-        color.y = Y(face_color);
-        color.z = Z(face_color);
+        auto faces = mesh->faces();
+        auto verts = mesh->vertices();
         
-        uint32_t face_id = 0;
-        if (!_mesh->getFaceId(f, face_id)) {
-            assert(false);
-            continue;
-        }
-        
-        for (auto& fv : *f)
+        for (auto& f : faces)
         {
-            auto& n = _mesh->normals()[fv.vn];
-            auto& v = _mesh->vertices()[fv.v];
+            auto face_color = mesh->getFaceColor(f);
+            vector_float4 color = {0, 0, 0, 1.f};
+            color.x = X(face_color);
+            color.y = Y(face_color);
+            color.z = Z(face_color);
             
-            _normals.push_back(n);
-            _vertices.push_back(v);
-            _face_сolors.push_back(color);
-            _faces_ids.push_back(face_id);
+            uint32_t face_id = 0;
+            if (!mesh->getFaceId(f, face_id)) {
+                assert(false);
+                continue;
+            }
+            
+            for (auto& fv : *f)
+            {
+                auto& n = mesh->normals()[fv.vn];
+                auto& v = mesh->vertices()[fv.v];
+                
+                _normals.push_back(n);
+                _vertices.push_back(v);
+                _face_сolors.push_back(color);
+                _faces_ids.push_back(face_id);
+            }
         }
-    }
-    
-    for (size_t vi=0; vi < vertices().size(); ++vi)
-    {
-        Shapr3D::Vec4 vc = _mesh->getVertexColor(vi);
         
-        vector_float4 vertex_color = {0, 0, 0, 1.f};
-        vertex_color.x = X(vc);
-        vertex_color.y = Y(vc);
-        vertex_color.z = Z(vc);
-        vertex_color.w = W(vc);
-        
-        _vertex_colors.push_back(vertex_color);
+        for (size_t vi=0; vi < vertices().size(); ++vi)
+        {
+            Vec4 vc = mesh->getVertexColor(vi);
+            
+            vector_float4 vertex_color = {0, 0, 0, 1.f};
+            vertex_color.x = X(vc);
+            vertex_color.y = Y(vc);
+            vertex_color.z = Z(vc);
+            vertex_color.w = W(vc);
+            
+            _vertex_colors.push_back(vertex_color);
+        }
     }
 }
 
@@ -94,7 +101,7 @@ uint64_t RawMeshData::indicesCount() const
 void RawMeshData::changeColorForFace(uint32_t faceId)
 {
     Shapr3D::GeoTypes::Vec4 new_color = {0.9, 0.2, 0.2, 1.0};
-    _mesh->changeColorFor(faceId, new_color);
+    _tmeshes.front()->changeColorFor(faceId, new_color);
     
     updateBuffers();
 }
@@ -110,7 +117,7 @@ void RawMeshData::changeColorForVertex(uint32_t vertexIndex)
 
 void RawMeshData::moveFaceBy(uint32_t faceid, float offset)
 {
-    _mesh->moveAlongNormal(faceid, offset);
+    _tmeshes.front()->moveAlongNormal(faceid, offset);
     
     updateBuffers();
 }

@@ -12,7 +12,7 @@
 #include <simd/simd.h>
 #include <stdio.h>
 #include "GeoTypes.h"
-#include "IMesh.h"
+#include "TrianMeshModel.hpp"
 
 #pragma GCC visibility push(default)
 
@@ -33,7 +33,10 @@ public:
 
     uint64_t indicesCount() const;
     
-    const std::vector<Shapr3D::Vec3>& vertices() { return _mesh->vertices(); }
+    const std::vector<Shapr3D::Vec3>& vertices() {
+//        return _mesh->vertices();
+        return _tmeshes.front()->vertices();
+    }
 
     void changeColorForFace(uint32_t faceId);
     void changeColorForVertex(uint32_t vertexIndex);
@@ -43,7 +46,9 @@ public:
     
 private:
     
-    std::unique_ptr<Shapr3D::IMesh> _mesh;
+    using ShTrianMeshModel = std::shared_ptr<Shapr3D::TrianMeshModel<Shapr3D::DataPool>>;
+    
+    std::vector<ShTrianMeshModel>   _tmeshes;
     
     std::vector<Shapr3D::GeoTypes::Vec3> _vertices;
     std::vector<Shapr3D::GeoTypes::Vec3> _normals;

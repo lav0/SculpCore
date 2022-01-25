@@ -250,8 +250,8 @@ int main(int argc, const char * argv[]) {
     const uint32_t* faceids = raw_mesh_data->lowLevelFaceIds();
     simd_float4 v0 = {vertices[0], vertices[1], vertices[2], 1};
     
-    assert(verCount == 24);
-    assert(indCount == 24);
+    assert(verCount == 36);
+    assert(indCount == 36);
 
     auto a = simd_length(v0.xyz);
     auto b = sqrt(3*0.2*0.2);
