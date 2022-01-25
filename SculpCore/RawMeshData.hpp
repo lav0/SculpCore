@@ -12,16 +12,24 @@
 #include <simd/simd.h>
 #include <stdio.h>
 #include "GeoTypes.h"
-#include "TrianMeshModel.hpp"
+#include "Node.hpp"
 
 #pragma GCC visibility push(default)
 
+struct NodeLoadInfo
+{
+    std::string _path;
+    std::string _name;
+    
+    NodeLoadInfo(std::string path, std::string name)
+    : _path(path), _name(name) {}
+};
 
 class RawMeshData
 {
 public:
     
-    RawMeshData(std::unique_ptr<Shapr3D::IMesh>&& mesh);
+    RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos);
     
     void updateBuffers();
 
@@ -43,11 +51,22 @@ public:
     
     uint32_t vertexCount() const;
     
+    void setPosition(const vector_float3& newValue) {
+        _nodesp.front()->setPosition(newValue);
+    }
+    vector_float3 positionOf(uint32_t index) const {
+        return _nodesp[index]->position();
+    }
+    matrix_float4x4 transformOf(uint32_t index) const {
+        return _nodesp[index]->transform();
+    }
+    
 private:
     
-    using ShTrianMeshModel = std::shared_ptr<Shapr3D::TrianMeshModel<Shapr3D::DataPool>>;
+    using NodeSp = std::shared_ptr<Shapr3D::Node>;
     
-    std::vector<ShTrianMeshModel>   _tmeshes;
+    std::vector<NodeSp>                  _nodesp;
+    std::map<uint32_t, size_t>           _offset2nodeIndex;
     
     std::vector<Shapr3D::GeoTypes::Vec3> _vertices;
     std::vector<Shapr3D::GeoTypes::Vec3> _originalVertices;

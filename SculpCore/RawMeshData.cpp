@@ -9,10 +9,17 @@
 
 using namespace Shapr3D;
 
-RawMeshData::RawMeshData(std::unique_ptr<IMesh>&& mesh)
+RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
 {
-    std::shared_ptr<IMesh> omesh = std::move(mesh);
-    _tmeshes.push_back(std::make_shared< TrianMeshModel<DataPool> >(omesh, 1));
+    uint32_t scene_offset = 1;
+    for (auto& info : nodes_infos) {
+        auto node_sp = std::make_shared<Node>(info._name, info._path, scene_offset);
+        
+//        _offset2nodeIndex[scene_offset] = _nodesp.size();
+        _nodesp.push_back(node_sp);
+        
+        scene_offset += node_sp->faceCount();
+    }
     
     updateBuffers();
 }
@@ -26,8 +33,10 @@ void RawMeshData::updateBuffers()
     _vertex_colors.clear();
     _faces_ids.clear();
     
-    for (auto& mesh : _tmeshes)
+    for (auto& node_sp : _nodesp)
     {
+        auto& mesh = node_sp->triangulated_mesh();
+        
         auto faces = mesh->faces();
         auto verts = mesh->vertices();
         
@@ -104,7 +113,8 @@ uint64_t RawMeshData::indicesCount() const
 void RawMeshData::changeColorForFace(uint32_t faceId)
 {
     Shapr3D::GeoTypes::Vec4 new_color = {0.9, 0.2, 0.2, 1.0};
-    _tmeshes.front()->changeColorFor(faceId, new_color);
+    
+    _nodesp.front()->triangulated_mesh()->changeColorFor(faceId, new_color);
     
     updateBuffers();
 }
@@ -120,7 +130,7 @@ void RawMeshData::changeColorForVertex(uint32_t vertexIndex)
 
 void RawMeshData::moveFaceBy(uint32_t faceid, float offset)
 {
-    _tmeshes.front()->moveAlongNormal(faceid, offset);
+    _nodesp.front()->triangulated_mesh()->moveAlongNormal(faceid, offset);
     
     updateBuffers();
 }
