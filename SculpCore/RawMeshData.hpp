@@ -20,9 +20,6 @@ struct NodeLoadInfo
 {
     std::string _path;
     std::string _name;
-    
-    NodeLoadInfo(std::string path, std::string name)
-    : _path(path), _name(name) {}
 };
 
 class RawMeshData
