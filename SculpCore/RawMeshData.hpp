@@ -67,6 +67,10 @@ private:
     using NodeSp = std::shared_ptr<Shapr3D::Node>;
     
     std::vector<NodeSp>                  _nodesp;
+    
+    // face offsets are used to find a unique triangle being tapped
+    // so we need to have unique face ids across all meshes.
+    // and here we map face id offsets interval to there respective nodes
     IntervalMap<uint32_t, size_t>        _offset2nodeIndex = IntervalMap<uint32_t, size_t>(INVALID_NODE_INDEX);
     
     std::vector<Shapr3D::GeoTypes::Vec3> _vertices;

@@ -15,6 +15,8 @@ RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
     for (auto& info : nodes_infos) {
         auto node_sp = std::make_shared<Node>(info._name, info._path, scene_offset);
         
+        assert(INVALID_NODE_INDEX != _nodesp.size()); // very unlikely to happen
+        
         _offset2nodeIndex.assign(scene_offset,
                                  scene_offset + node_sp->faceCount(),
                                  _nodesp.size());
@@ -71,7 +73,9 @@ void RawMeshData::updateBuffers()
             }
         }
         
-        for (size_t vi=0; vi < vertices().size(); ++vi)
+        printf("vert size: %lu\n", _vertices.size());
+        
+        for (size_t vi=0; vi < mesh->vertices().size(); ++vi)
         {
             Vec4 vc = mesh->getVertexColor(vi);
             
@@ -125,6 +129,9 @@ void RawMeshData::changeColorForFace(uint32_t faceId)
         
         updateBuffers();
     }
+    else {
+        assert(false);
+    }
 }
 void RawMeshData::changeColorForVertex(uint32_t vertexIndex)
 {
@@ -145,6 +152,9 @@ void RawMeshData::moveFaceBy(uint32_t faceid, float offset)
         _nodesp[nodeIdx]->triangulated_mesh()->moveAlongNormal(faceid, offset);
         
         updateBuffers();
+    }
+    else {
+        assert(false);
     }
 }
 
