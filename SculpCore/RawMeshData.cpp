@@ -11,6 +11,8 @@ using namespace Shapr3D;
 
 RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
 {
+    uint32_t prev_vertex_count = 0;
+    uint64_t orig_vertex_count = 0;
     uint32_t scene_offset = 1;
     for (auto& info : nodes_infos) {
         auto node_sp = std::make_shared<Node>(info._name, info._path, scene_offset);
@@ -21,9 +23,14 @@ RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
                                  scene_offset + node_sp->faceCount(),
                                  _nodesp.size());
         
+        _node2vertexStart[_nodesp.size()] = prev_vertex_count;
+        _node2origVertexStart[_nodesp.size()] = orig_vertex_count;
+        
         _nodesp.push_back(node_sp);
         
         scene_offset += node_sp->faceCount();
+        prev_vertex_count += 3 * node_sp->faceCount();
+        orig_vertex_count += node_sp->vertexCount();
     }
     
     updateBuffers();
@@ -72,8 +79,6 @@ void RawMeshData::updateBuffers()
                 _faces_ids.push_back(face_id);
             }
         }
-        
-        printf("vert size: %lu\n", _vertices.size());
         
         for (size_t vi=0; vi < mesh->vertices().size(); ++vi)
         {
@@ -161,4 +166,9 @@ void RawMeshData::moveFaceBy(uint32_t faceid, float offset)
 uint32_t RawMeshData::originalVertexCount() const
 {
     return static_cast<uint32_t>(_originalVertices.size());
+}
+
+void RawMeshData::setPosition(size_t nodeIndex, const vector_float3& newValue)
+{
+    _nodesp[nodeIndex]->setPosition(newValue);
 }

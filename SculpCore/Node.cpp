@@ -18,7 +18,7 @@ Node::Node(std::string name,
     auto mesh = _reader->load();
     
     std::shared_ptr<IMesh> omesh = std::move(mesh);
-    _tmesh = std::make_shared< TrianMeshModel<DataPool> >(omesh, 1);
+    _tmesh = std::make_shared< TrianMeshModel<DataPool> >(omesh, scene_faceid_offset);
 }
 
 matrix_float4x4 Node::transform() const
@@ -60,4 +60,9 @@ matrix_float4x4 Node::rotationMax() const
 size_t Node::faceCount() const
 {
     return _tmesh->faces().size();
+}
+
+size_t Node::vertexCount() const
+{
+    return _tmesh->vertices().size();
 }

@@ -38,6 +38,7 @@ public:
     }
     
     size_t faceCount() const;
+    size_t vertexCount() const;
     
 private:
     
