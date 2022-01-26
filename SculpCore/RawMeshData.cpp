@@ -158,7 +158,7 @@ void RawMeshData::moveFaceBy(uint32_t faceid, float offset)
     }
 }
 
-uint32_t RawMeshData::vertexCount() const
+uint32_t RawMeshData::originalVertexCount() const
 {
-    return static_cast<uint32_t>(_vertices.size());
+    return static_cast<uint32_t>(_originalVertices.size());
 }

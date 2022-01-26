@@ -41,6 +41,10 @@ public:
     uint64_t indicesCount() const;
     
     const std::vector<Shapr3D::Vec3>& vertices() const {
+        printf("original vert: \n");
+        for (auto& v : _originalVertices) {
+            printf("%f %f %f\n", v.a[0], v.a[1], v.a[2]);
+        }
         return _originalVertices;
     }
 
@@ -48,7 +52,7 @@ public:
     void changeColorForVertex(uint32_t vertexIndex);
     void moveFaceBy(uint32_t faceid, float offset);
     
-    uint32_t vertexCount() const;
+    uint32_t originalVertexCount() const;
     
     void setPosition(const vector_float3& newValue) {
         _nodesp.front()->setPosition(newValue);
