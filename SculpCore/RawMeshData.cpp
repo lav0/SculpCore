@@ -15,7 +15,10 @@ RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
     for (auto& info : nodes_infos) {
         auto node_sp = std::make_shared<Node>(info._name, info._path, scene_offset);
         
-//        _offset2nodeIndex[scene_offset] = _nodesp.size();
+        _offset2nodeIndex.assign(scene_offset,
+                                 scene_offset + node_sp->faceCount(),
+                                 _nodesp.size());
+        
         _nodesp.push_back(node_sp);
         
         scene_offset += node_sp->faceCount();
@@ -114,9 +117,14 @@ void RawMeshData::changeColorForFace(uint32_t faceId)
 {
     Shapr3D::GeoTypes::Vec4 new_color = {0.9, 0.2, 0.2, 1.0};
     
-    _nodesp.front()->triangulated_mesh()->changeColorFor(faceId, new_color);
+    auto nodeIdx = _offset2nodeIndex[faceId];
     
-    updateBuffers();
+    if (nodeIdx != INVALID_NODE_INDEX)
+    {
+        _nodesp[nodeIdx]->triangulated_mesh()->changeColorFor(faceId, new_color);
+        
+        updateBuffers();
+    }
 }
 void RawMeshData::changeColorForVertex(uint32_t vertexIndex)
 {
@@ -130,9 +138,14 @@ void RawMeshData::changeColorForVertex(uint32_t vertexIndex)
 
 void RawMeshData::moveFaceBy(uint32_t faceid, float offset)
 {
-    _nodesp.front()->triangulated_mesh()->moveAlongNormal(faceid, offset);
+    auto nodeIdx = _offset2nodeIndex[faceid];
     
-    updateBuffers();
+    if (nodeIdx != INVALID_NODE_INDEX)
+    {
+        _nodesp[nodeIdx]->triangulated_mesh()->moveAlongNormal(faceid, offset);
+        
+        updateBuffers();
+    }
 }
 
 uint32_t RawMeshData::vertexCount() const

@@ -10,9 +10,11 @@
 
 #include <boost/qvm/vec_access.hpp>
 #include <simd/simd.h>
+#include <limits>
 #include <stdio.h>
 #include "GeoTypes.h"
 #include "Node.hpp"
+#include "Utils/IntervalMap.cpp"
 
 #pragma GCC visibility push(default)
 
@@ -60,10 +62,12 @@ public:
     
 private:
     
+    constexpr static size_t INVALID_NODE_INDEX = std::numeric_limits<size_t>::max();
+    
     using NodeSp = std::shared_ptr<Shapr3D::Node>;
     
     std::vector<NodeSp>                  _nodesp;
-    std::map<uint32_t, size_t>           _offset2nodeIndex;
+    IntervalMap<uint32_t, size_t>        _offset2nodeIndex = IntervalMap<uint32_t, size_t>(INVALID_NODE_INDEX);
     
     std::vector<Shapr3D::GeoTypes::Vec3> _vertices;
     std::vector<Shapr3D::GeoTypes::Vec3> _originalVertices;

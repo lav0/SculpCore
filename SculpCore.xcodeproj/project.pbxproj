@@ -14,6 +14,8 @@
 		5538D04927A04707007E1665 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5538D04727A04706007E1665 /* Node.cpp */; };
 		5538D04A27A04707007E1665 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5538D04727A04706007E1665 /* Node.cpp */; };
 		5538D04B27A04707007E1665 /* Node.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 5538D04827A04706007E1665 /* Node.hpp */; };
+		5538D04D27A0FA37007E1665 /* IntervalMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5538D04C27A0FA37007E1665 /* IntervalMap.cpp */; };
+		5538D04E27A0FA37007E1665 /* IntervalMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5538D04C27A0FA37007E1665 /* IntervalMap.cpp */; };
 		55AE6DEC26102BEB00DF5921 /* IGeometryEntity.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DDA26102BEB00DF5921 /* IGeometryEntity.hpp */; };
 		55AE6DED26102BEB00DF5921 /* CommonFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55AE6DDB26102BEB00DF5921 /* CommonFunctions.cpp */; };
 		55AE6DEE26102BEB00DF5921 /* CommonFunctions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 55AE6DDC26102BEB00DF5921 /* CommonFunctions.hpp */; };
@@ -67,6 +69,7 @@
 		5538D03C279EE4F8007E1665 /* TrianMeshModel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TrianMeshModel.hpp; sourceTree = "<group>"; };
 		5538D04727A04706007E1665 /* Node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
 		5538D04827A04706007E1665 /* Node.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Node.hpp; sourceTree = "<group>"; };
+		5538D04C27A0FA37007E1665 /* IntervalMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntervalMap.cpp; sourceTree = "<group>"; };
 		55AE6DB3261028EC00DF5921 /* libSculpCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSculpCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		55AE6DDA26102BEB00DF5921 /* IGeometryEntity.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IGeometryEntity.hpp; sourceTree = "<group>"; };
 		55AE6DDB26102BEB00DF5921 /* CommonFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CommonFunctions.cpp; sourceTree = "<group>"; };
@@ -127,6 +130,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5538D04F27A0FA46007E1665 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				5538D04C27A0FA37007E1665 /* IntervalMap.cpp */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		55AE6DAA261028EC00DF5921 = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +160,7 @@
 		55AE6DB5261028EC00DF5921 /* SculpCore */ = {
 			isa = PBXGroup;
 			children = (
+				5538D04F27A0FA46007E1665 /* Utils */,
 				55AE6DDB26102BEB00DF5921 /* CommonFunctions.cpp */,
 				55AE6DDC26102BEB00DF5921 /* CommonFunctions.hpp */,
 				55AE6DE226102BEB00DF5921 /* CommonTypes.h */,
@@ -283,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				552ECB2D27940DC70082695C /* main.cpp in Sources */,
+				5538D04E27A0FA37007E1665 /* IntervalMap.cpp in Sources */,
 				5538D04A27A04707007E1665 /* Node.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,6 +306,7 @@
 			files = (
 				55AE6DF026102BEB00DF5921 /* ObjReader.cpp in Sources */,
 				55E2BB1426135D6D00270239 /* RawMeshData.cpp in Sources */,
+				5538D04D27A0FA37007E1665 /* IntervalMap.cpp in Sources */,
 				55AE6DEF26102BEB00DF5921 /* StlWriter.cpp in Sources */,
 				5538D04927A04707007E1665 /* Node.cpp in Sources */,
 				55AE6DF326102BEB00DF5921 /* MeshModel.cpp in Sources */,
