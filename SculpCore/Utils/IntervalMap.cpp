@@ -91,6 +91,10 @@ public:
         return true;
     }
     
+    K greatest_key() const {
+        return m_map.rbegin()->first;
+    }
+    
 private:
     
     V m_valBegin;

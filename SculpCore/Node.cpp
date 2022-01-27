@@ -10,13 +10,23 @@
 using namespace Shapr3D;
 
 Node::Node(std::string name,
-           std::string read_file_path,
+           std::string read_objfile_path,
            uint32_t    scene_faceid_offset)
 : _name(name)
-, _reader(std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(read_file_path))
 {
-    auto mesh = _reader->load();
+    auto reader = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(read_objfile_path);
     
+    auto mesh = reader->load();
+    
+    std::shared_ptr<IMesh> omesh = std::move(mesh);
+    _tmesh = std::make_shared< TrianMeshModel<DataPool> >(omesh, scene_faceid_offset);
+}
+
+Node::Node(std::string name,
+           std::unique_ptr<IMesh>&& mesh,
+           uint32_t    scene_faceid_offset)
+: _name(name)
+{
     std::shared_ptr<IMesh> omesh = std::move(mesh);
     _tmesh = std::make_shared< TrianMeshModel<DataPool> >(omesh, scene_faceid_offset);
 }
@@ -65,4 +75,9 @@ size_t Node::faceCount() const
 size_t Node::vertexCount() const
 {
     return _tmesh->vertices().size();
+}
+
+const std::string& Node::name() const
+{
+    return _name;
 }

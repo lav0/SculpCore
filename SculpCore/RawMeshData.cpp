@@ -6,7 +6,7 @@
 //
 
 #include "RawMeshData.hpp"
-
+#include "MeshBuilder.cpp"
 using namespace Shapr3D;
 
 RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
@@ -14,9 +14,9 @@ RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
     uint32_t prev_vertex_count = 0;
     uint64_t orig_vertex_count = 0;
     uint32_t scene_offset = 1;
-    for (auto& info : nodes_infos) {
-        auto node_sp = std::make_shared<Node>(info._name, info._path, scene_offset);
-        
+    
+    auto newNode = [&prev_vertex_count, &orig_vertex_count, &scene_offset, this](auto node_sp)
+    {
         assert(INVALID_NODE_INDEX != _nodesp.size()); // very unlikely to happen
         
         _offset2nodeIndex.assign(scene_offset,
@@ -31,7 +31,15 @@ RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
         scene_offset += node_sp->faceCount();
         prev_vertex_count += 3 * node_sp->faceCount();
         orig_vertex_count += node_sp->vertexCount();
+    };
+    
+    for (auto& info : nodes_infos)
+    {
+        newNode(std::make_shared<Node>(info._name, info._path, scene_offset));
     }
+    
+//    auto n = std::make_shared<Node>("tri", MeshBuilder::buildTriangle(), scene_offset);
+//    newNode(n);
     
     updateBuffers();
 }
@@ -93,6 +101,42 @@ void RawMeshData::updateBuffers()
             _vertex_colors.push_back(vertex_color);
         }
     }
+}
+
+const uint64_t RawMeshData::addMesh(std::unique_ptr<IMesh>&& newMesh)
+{
+    const auto greatest_offset = _offset2nodeIndex.greatest_key();
+    
+    const auto node_sp = std::make_shared< Node >("New mesh", std::move(newMesh), greatest_offset);
+    const auto nodeIndex = _nodesp.size();
+    
+    _offset2nodeIndex.assign(greatest_offset,
+                             greatest_offset + node_sp->faceCount(),
+                             nodeIndex);
+    
+    auto prev_vertex_count = 0;
+    auto orig_vertex_count = 0;
+    if ( !_nodesp.empty() ) {
+        prev_vertex_count = startVertexOf(nodeIndex - 1) + indexCountOf(nodeIndex - 1   );
+        orig_vertex_count = vertexStartOriginal(nodeIndex - 1) + indexCountOriginal(nodeIndex - 1);
+    }
+    _node2vertexStart[nodeIndex] = prev_vertex_count;
+    _node2origVertexStart[nodeIndex] = orig_vertex_count;
+    
+    _nodesp.push_back(node_sp);
+    
+    updateBuffers();
+    
+    return nodeIndex;
+}
+
+const uint64_t RawMeshData::renderNodeCount() const
+{
+    return _nodesp.size();
+}
+const std::string& RawMeshData::getNodeNameBy(uint64_t index) const
+{
+    return _nodesp[index]->name();
 }
 
 const float* RawMeshData::lowLevelVertices() const
@@ -171,4 +215,34 @@ uint32_t RawMeshData::originalVertexCount() const
 void RawMeshData::setPosition(size_t nodeIndex, const vector_float3& newValue)
 {
     _nodesp[nodeIndex]->setPosition(newValue);
+}
+
+vector_float3 RawMeshData::positionOf(size_t nodeIndex) const {
+    return _nodesp[nodeIndex]->position();
+}
+matrix_float4x4 RawMeshData::transformOf(size_t nodeIndex) const {
+    return _nodesp[nodeIndex]->transform();
+}
+
+uint32_t RawMeshData::indexCountOf(size_t nodeIndex) const {
+    return 3 * _nodesp[nodeIndex]->faceCount();
+}
+uint64_t RawMeshData::indexCountOriginal(size_t nodeIndex) const {
+    return _nodesp[nodeIndex]->vertexCount();
+}
+uint32_t RawMeshData::startVertexOf(size_t nodeIndex) const {
+    auto it = _node2vertexStart.find(nodeIndex);
+    if (it != _node2vertexStart.end()) {
+        return it->second;
+    }
+    assert(false);
+    return 0;
+}
+uint64_t RawMeshData::vertexStartOriginal(size_t nodeIndex) const {
+    auto it = _node2origVertexStart.find(nodeIndex);
+    if (it != _node2origVertexStart.end()) {
+        return it->second;
+    }
+    assert(false);
+    return INVALID_VERTEX_COUNT;
 }

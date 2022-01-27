@@ -16,6 +16,8 @@
 #include "ObjReader.hpp"
 
 namespace Shapr3D {
+
+// Our Assumption: Node contains triangulated mesh only
 class Node
 {
     using TrianMeshSp = std::shared_ptr<Shapr3D::TrianMeshModel<Shapr3D::DataPool>>;
@@ -23,7 +25,11 @@ class Node
 public:
     
     Node(std::string name,
-         std::string read_file_path,
+         std::string read_objfile_path,
+         uint32_t    scene_faceid_offset);
+    
+    Node(std::string name,
+         std::unique_ptr<IMesh>&& mesh,
          uint32_t    scene_faceid_offset);
     
     matrix_float4x4 transform() const;
@@ -39,6 +45,7 @@ public:
     
     size_t faceCount() const;
     size_t vertexCount() const;
+    const std::string& name() const;
     
 private:
     
@@ -51,7 +58,6 @@ private:
     std::string _name;
     
     TrianMeshSp _tmesh;
-    std::unique_ptr<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>> _reader;
     
     vector_float3 _position = {0, 0, 0};
     vector_float3 _scale    = {1, 1, 1};

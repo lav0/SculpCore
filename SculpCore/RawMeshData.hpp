@@ -31,6 +31,10 @@ public:
     RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos);
     
     void updateBuffers();
+    
+    const uint64_t addMesh(std::unique_ptr<Shapr3D::IMesh>&& newMesh);
+    const uint64_t renderNodeCount() const;
+    const std::string& getNodeNameBy(uint64_t index) const;
 
     const float* lowLevelVertices() const;
     const float* lowLevelNormals() const;
@@ -52,35 +56,13 @@ public:
     
     void setPosition(size_t nodeIndex, const vector_float3& newValue);
     
-    vector_float3 positionOf(size_t nodeIndex) const {
-        return _nodesp[nodeIndex]->position();
-    }
-    matrix_float4x4 transformOf(size_t nodeIndex) const {
-        return _nodesp[nodeIndex]->transform();
-    }
+    vector_float3 positionOf(size_t nodeIndex) const;
+    matrix_float4x4 transformOf(size_t nodeIndex) const;
     
-    uint32_t indexCountOf(size_t nodeIndex) const {
-        return 3 * _nodesp[nodeIndex]->faceCount();
-    }
-    uint64_t indexCountOriginal(size_t nodeIndex) const {
-        return _nodesp[nodeIndex]->vertexCount();
-    }
-    uint32_t startVertexOf(size_t nodeIndex) const {
-        auto it = _node2vertexStart.find(nodeIndex);
-        if (it != _node2vertexStart.end()) {
-            return it->second;
-        }
-        assert(false);
-        return 0;
-    }
-    uint64_t vertexStartOriginal(size_t nodeIndex) const {
-        auto it = _node2origVertexStart.find(nodeIndex);
-        if (it != _node2origVertexStart.end()) {
-            return it->second;
-        }
-        assert(false);
-        return INVALID_VERTEX_COUNT;
-    }
+    uint32_t indexCountOf(size_t nodeIndex) const;
+    uint64_t indexCountOriginal(size_t nodeIndex) const;
+    uint32_t startVertexOf(size_t nodeIndex) const;
+    uint64_t vertexStartOriginal(size_t nodeIndex) const;
     
 private:
     
