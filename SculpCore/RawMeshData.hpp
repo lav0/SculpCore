@@ -33,7 +33,7 @@ public:
     void updateBuffers();
     
     const uint64_t addMesh(std::unique_ptr<Shapr3D::IMesh>&& newMesh);
-    const uint64_t renderNodeCount() const;
+    const uint64_t nodeCount() const;
     const std::string& getNodeNameBy(uint64_t index) const;
 
     const float* lowLevelVertices() const;
@@ -63,6 +63,10 @@ public:
     uint64_t indexCountOriginal(size_t nodeIndex) const;
     uint32_t startVertexOf(size_t nodeIndex) const;
     uint64_t vertexStartOriginal(size_t nodeIndex) const;
+    
+private:
+    
+    void pushBack(const std::shared_ptr<Shapr3D::TrianMeshModel<Shapr3D::DataPool>>& tmesh);
     
 private:
     

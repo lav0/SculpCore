@@ -44,6 +44,53 @@ RawMeshData::RawMeshData(const std::vector<NodeLoadInfo>& nodes_infos)
     updateBuffers();
 }
 
+void RawMeshData::pushBack(const std::shared_ptr<Shapr3D::TrianMeshModel<Shapr3D::DataPool>>& tmesh)
+{
+    auto faces = tmesh->faces();
+    auto verts = tmesh->vertices();
+    
+    _originalVertices.insert(_originalVertices.end(), verts.begin(), verts.end());
+    
+    for (auto& f : faces)
+    {
+        auto face_color = tmesh->getFaceColor(f);
+        vector_float4 color = {0, 0, 0, 1.f};
+        color.x = X(face_color);
+        color.y = Y(face_color);
+        color.z = Z(face_color);
+        
+        uint32_t face_id = 0;
+        if (!tmesh->getFaceId(f, face_id)) {
+            assert(false);
+            continue;
+        }
+        
+        for (auto& fv : *f)
+        {
+            auto& n = tmesh->normals()[fv.vn];
+            auto& v = tmesh->vertices()[fv.v];
+            
+            _normals.push_back(n);
+            _vertices.push_back(v);
+            _face_сolors.push_back(color);
+            _faces_ids.push_back(face_id);
+        }
+    }
+    
+    for (size_t vi=0; vi < tmesh->vertices().size(); ++vi)
+    {
+        Vec4 vc = tmesh->getVertexColor(vi);
+        
+        vector_float4 vertex_color = {0, 0, 0, 1.f};
+        vertex_color.x = X(vc);
+        vertex_color.y = Y(vc);
+        vertex_color.z = Z(vc);
+        vertex_color.w = W(vc);
+        
+        _vertex_colors.push_back(vertex_color);
+    }
+}
+
 void RawMeshData::updateBuffers()
 {
     _normals.clear();
@@ -57,49 +104,7 @@ void RawMeshData::updateBuffers()
     {
         auto& mesh = node_sp->triangulated_mesh();
         
-        auto faces = mesh->faces();
-        auto verts = mesh->vertices();
-        
-        _originalVertices.insert(_originalVertices.end(), verts.begin(), verts.end());
-        
-        for (auto& f : faces)
-        {
-            auto face_color = mesh->getFaceColor(f);
-            vector_float4 color = {0, 0, 0, 1.f};
-            color.x = X(face_color);
-            color.y = Y(face_color);
-            color.z = Z(face_color);
-            
-            uint32_t face_id = 0;
-            if (!mesh->getFaceId(f, face_id)) {
-                assert(false);
-                continue;
-            }
-            
-            for (auto& fv : *f)
-            {
-                auto& n = mesh->normals()[fv.vn];
-                auto& v = mesh->vertices()[fv.v];
-                
-                _normals.push_back(n);
-                _vertices.push_back(v);
-                _face_сolors.push_back(color);
-                _faces_ids.push_back(face_id);
-            }
-        }
-        
-        for (size_t vi=0; vi < mesh->vertices().size(); ++vi)
-        {
-            Vec4 vc = mesh->getVertexColor(vi);
-            
-            vector_float4 vertex_color = {0, 0, 0, 1.f};
-            vertex_color.x = X(vc);
-            vertex_color.y = Y(vc);
-            vertex_color.z = Z(vc);
-            vertex_color.w = W(vc);
-            
-            _vertex_colors.push_back(vertex_color);
-        }
+        pushBack(mesh);
     }
 }
 
@@ -125,12 +130,12 @@ const uint64_t RawMeshData::addMesh(std::unique_ptr<IMesh>&& newMesh)
     
     _nodesp.push_back(node_sp);
     
-    updateBuffers();
+    pushBack( node_sp->triangulated_mesh() );
     
     return nodeIndex;
 }
 
-const uint64_t RawMeshData::renderNodeCount() const
+const uint64_t RawMeshData::nodeCount() const
 {
     return _nodesp.size();
 }

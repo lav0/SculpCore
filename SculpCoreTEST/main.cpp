@@ -13,6 +13,7 @@
 #include "../SculpCore/TrianMeshModel.hpp"
 #include "../SculpCore/RawMeshData.hpp"
 #include "../SculpCore/ObjReader.hpp"
+#include "../SculpCore/MeshBuilder.cpp"
 
 using namespace Shapr3D;
 bool meshModelFaceColorChangeTest(std::unique_ptr<IMesh>&& mesh) {
@@ -230,27 +231,70 @@ bool trianMeshModelByIMesh(std::unique_ptr<IMesh>&& mesh)
     return true;
 }
 
+bool testAddNewMesh(const NodeLoadInfo& load_info)
+{
+    auto raw_mesh_data = new RawMeshData({ load_info });
+    
+    auto nc = raw_mesh_data->nodeCount();
+    auto ic = raw_mesh_data->indicesCount();
+    auto ov = raw_mesh_data->vertices().size();
+    
+    assert(nc == 1);
+    assert(ic == 36);
+    assert(ov == 8);
+    
+    raw_mesh_data->addMesh(Shapr3D::MeshBuilder::buildTriangle());
+    
+    nc = raw_mesh_data->nodeCount();
+    ic = raw_mesh_data->indicesCount();
+    ov = raw_mesh_data->vertices().size();
+    
+    assert(nc == 2);
+    assert(ic == 39);
+    assert(ov == 11);
+    
+    raw_mesh_data->addMesh(Shapr3D::MeshBuilder::buildTriangle());
+    
+    nc = raw_mesh_data->nodeCount();
+    ic = raw_mesh_data->indicesCount();
+    ov = raw_mesh_data->vertices().size();
+    
+    assert(nc == 3);
+    assert(ic == 42);
+    assert(ov == 14);
+    
+    delete raw_mesh_data;
+    
+    printf("testAddNewMesh : success\n");
+    return true;
+}
+
 int main(int argc, const char * argv[]) {
     std::string file_path("/Users/Andrey/Documents/dev/Xcode-projects/sculpMe/Resources/cube-small.obj");
+    NodeLoadInfo load_info;
+    load_info._path = file_path;
+    load_info._name = "test";
+    
     auto reader1 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
     auto reader2 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
     auto reader3 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
     auto reader4 = std::make_unique<Shapr3D::ObjReader<Shapr3D::GeoTypes::Vec3, Shapr3D::GeoTypes::Face>>(file_path);
     
-    auto raw_mesh_data = new RawMeshData(reader1->load());
+    auto raw_mesh_data = new RawMeshData({ load_info });
     
     meshModelFaceColorChangeTest(reader2->load());
     meshModelFaceMoveAlongNormalTest(reader3->load());
     meshModelTriangulateTest();
     trianMeshModelByIMesh(reader4->load());
+    testAddNewMesh(load_info);
     
     auto indCount = raw_mesh_data->indicesCount();
-    auto verCount = raw_mesh_data->vertexCount();
+    auto verCount = raw_mesh_data->originalVertexCount();
     const float* vertices = raw_mesh_data->lowLevelVertices();
     const uint32_t* faceids = raw_mesh_data->lowLevelFaceIds();
     simd_float4 v0 = {vertices[0], vertices[1], vertices[2], 1};
     
-    assert(verCount == 36);
+    assert(verCount == 8);
     assert(indCount == 36);
 
     auto a = simd_length(v0.xyz);
