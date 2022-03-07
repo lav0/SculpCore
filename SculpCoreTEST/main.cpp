@@ -253,15 +253,15 @@ bool testAddNewMesh(const NodeLoadInfo& load_info)
     assert(ic == 39);
     assert(ov == 11);
     
-    raw_mesh_data->addMesh(Shapr3D::MeshBuilder::buildTriangle());
+    raw_mesh_data->addMesh(Shapr3D::MeshBuilder::buildSquare());
     
     nc = raw_mesh_data->nodeCount();
     ic = raw_mesh_data->indicesCount();
     ov = raw_mesh_data->vertices().size();
     
     assert(nc == 3);
-    assert(ic == 42);
-    assert(ov == 14);
+    assert(ic == 45);
+    assert(ov == 15);
     
     delete raw_mesh_data;
     

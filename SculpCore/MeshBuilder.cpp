@@ -36,5 +36,29 @@ public:
         return std::make_unique< MeshModel<DataPool> >(vertices, texture_vertices, normals, faces);
     }
     
+    static std::unique_ptr<IMesh> buildSquare()
+    {
+        std::vector<Vec3> vertices = {
+            {0, 0, 0},
+            {0, 0, 1},
+            {1, 0, 1},
+            {1, 0, 0}
+        };
+        std::vector<Vec3> texture_vertices;
+        std::vector<Vec3> normals = {
+            {0, 1, 0}
+        };
+        
+        FaceVertex f0, f1, f2, f3;
+        f0.v = 0; f0.vn = 0;
+        f1.v = 1; f1.vn = 0;
+        f2.v = 2; f2.vn = 0;
+        f3.v = 3; f3.vn = 0;
+        
+        std::vector<Face> faces = { Face{f0, f1, f2, f3} };
+        
+        return std::make_unique< MeshModel<DataPool> >(vertices, texture_vertices, normals, faces);
+    }
+    
 };
 }
