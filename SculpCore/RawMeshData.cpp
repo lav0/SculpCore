@@ -251,3 +251,8 @@ uint64_t RawMeshData::vertexStartOriginal(size_t nodeIndex) const {
     assert(false);
     return INVALID_VERTEX_COUNT;
 }
+
+size_t RawMeshData::nodeIdBy(uint32_t faceId) const
+{
+    return _offset2nodeIndex[faceId];
+}

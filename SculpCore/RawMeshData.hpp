@@ -64,6 +64,8 @@ public:
     uint32_t startVertexOf(size_t nodeIndex) const;
     uint64_t vertexStartOriginal(size_t nodeIndex) const;
     
+    size_t nodeIdBy(uint32_t faceId) const;
+    
 private:
     
     void pushBack(const std::shared_ptr<Shapr3D::TrianMeshModel<Shapr3D::DataPool>>& tmesh);
